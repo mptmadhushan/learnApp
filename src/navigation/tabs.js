@@ -9,7 +9,8 @@ import Svg, {Path} from 'react-native-svg';
 import {isIphoneX} from 'react-native-iphone-x-helper';
 
 import Home from '../screens/Home';
-import OnBoarding2 from '../screens/OnBoarding2';
+import Comp3 from '../screens/Comp3';
+import Drawing from '../screens/Drawing';
 
 import {COLORS, icons} from '../constants';
 
@@ -121,7 +122,7 @@ const Tabs = () => {
 
       <Tab.Screen
         name="Search"
-        component={Home}
+        component={Comp3}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
@@ -140,7 +141,7 @@ const Tabs = () => {
 
       <Tab.Screen
         name="Like"
-        component={Home}
+        component={Drawing}
         options={{
           tabBarIcon: ({focused}) => (
             <Image

@@ -14,106 +14,81 @@ import {
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
 const Home = ({navigation}) => {
-  function renderHeader() {
+  function renderHome() {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={{flex: 1}}
           source={require('../assets/images/pngtree-cartoon-kid-meadow-green-background-material-image_124473.jpg')}>
-          <View style={styles.container}>
-            <View style={styles.contentCenter}>
-              <Text style={styles.title}>xyz App</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  // navigation.navigate('PreAccident');
-                }}
-                style={{
-                  marginTop: SIZES.height * 0.1,
-                  marginLeft: -10,
-                  borderRadius: 30,
-                  paddingVertical: 15,
-                  paddingHorizontal: 25,
-                  marginBottom: 20,
-                  justifyContent: 'center',
-                  backgroundColor: COLORS.primary,
-                }}>
-                <Text style={{...FONTS.h3, color: COLORS.white}}>
-                  component 01
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  // createUser();
-                  // navigation.navigate('CallAmbulance');
-                  // navigation.navigate('Home');
-                }}
-                style={{
-                  marginLeft: 70,
-                  elevation: 8,
-                  borderRadius: 30,
-                  paddingVertical: 15,
-                  paddingHorizontal: 25,
-                  marginBottom: 20,
-                  justifyContent: 'center',
-                  backgroundColor: COLORS.primary,
-                }}>
-                <Text style={{...FONTS.h3, color: COLORS.white}}>
-                  component 02
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  // createUser();
-                  // navigation.navigate('PreAccident');
-                  // navigation.navigate('Home');
-                }}
-                style={{
-                  marginTop: SIZES.height * 0.1,
-                  marginLeft: 100,
-                  borderRadius: 30,
-                  paddingVertical: 15,
-                  paddingHorizontal: 25,
-                  marginBottom: 20,
-                  justifyContent: 'center',
-                  backgroundColor: COLORS.primary,
-                }}>
-                <Text style={{...FONTS.h3, color: COLORS.white}}>
-                  component 03
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  // navigation.navigate('CallAmbulance');
-                }}
-                style={{
-                  marginLeft: -20,
-                  elevation: 8,
-                  borderRadius: 30,
-                  paddingVertical: 15,
-                  paddingHorizontal: 25,
-                  marginBottom: 20,
-                  justifyContent: 'center',
-                  backgroundColor: COLORS.primary,
-                }}>
-                <Text style={{...FONTS.h3, color: COLORS.white}}>
-                  component 04
-                </Text>
-              </TouchableOpacity>
-            </View>
+          <View style={styles.containerNew}>
+            <TouchableOpacity
+              onPress={() => {
+                // navigation.navigate('Quiz');
+              }}
+              style={styles.container2}>
+              <View style={styles.firstCard}>
+                <Image
+                  style={{height: '60%', width: '50%'}}
+                  source={require('../assets/clip-applying-to-university-online.png')}
+                />
+                <Text style={styles.title}>e-learning App</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Quiz');
+              }}
+              style={styles.container3}>
+              <View style={styles.secondCard}>
+                <Image
+                  style={{height: '60%', width: '50%'}}
+                  source={require('../assets/flame-training.png')}
+                />
+                <Text style={styles.title2}>IQ</Text>
+              </View>
+              <View style={styles.secondCard}>
+                <Image
+                  style={{height: '60%', width: '50%'}}
+                  source={require('../assets/clip-reading-of-books-1.png')}
+                />
+                <Text style={styles.title2}>Quiz</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </ImageBackground>
       </SafeAreaView>
     );
   }
 
-  return <SafeAreaView style={styles.container}>{renderHeader()}</SafeAreaView>;
+  return <SafeAreaView style={styles.container}>{renderHome()}</SafeAreaView>;
 };
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   backgroundColor: COLORS.lightGray4,
-  // },
+  containerNew: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  firstCard: {
+    display: 'flex',
+    height: SIZES.height / 4,
+    width: '80%',
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+  },
+  secondCard: {
+    display: 'flex',
+    height: SIZES.height / 5,
+    width: '40%',
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+  },
   shadow: {
     shadowColor: '#000',
     shadowOffset: {
@@ -126,12 +101,33 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    justifyContent: 'space-around',
+  },
+  container2: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container3: {
+    flex: 1,
+    marginTop: -SIZES.height / 3,
+    width: SIZES.width,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   title: {
     marginTop: 0.16,
-    fontSize: 55,
+    fontSize: 25,
     padding: 15,
-    color: 'black',
+    color: COLORS.secondary,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  title2: {
+    fontSize: 15,
+    padding: 10,
+    color: COLORS.secondary,
     fontWeight: 'bold',
     textAlign: 'center',
   },
