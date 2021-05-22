@@ -19,13 +19,14 @@ import SpeechResults from './src/screens/SpeechResults';
 import DrawingTest from './src/screens/DrawingTest';
 import DrawingUpload from './src/screens/DrawingUpload';
 import DrawingResults from './src/screens/DrawingResults';
+import ObjectD from './src/screens/ObjectD';
 
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName={'Home'}>
+        initialRouteName={'OnBoard'}>
         <Stack.Screen name="Home" component={Tabs} />
         <Stack.Screen name="OnBoard" component={OnBoard} />
         <Stack.Screen name="OnBoard2" component={OnBoard2} />
@@ -35,6 +36,7 @@ const App = () => {
         <Stack.Screen name="QuizResults" component={QuizResults} />
         <Stack.Screen name="LeaderBoard" component={LeaderBoard} />
         <Stack.Screen name="Speech" component={Speech} />
+        <Stack.Screen name="Object" component={ObjectD} />
         <Stack.Screen name="SpeechResults" component={SpeechResults} />
         <Stack.Screen name="DrawingTest" component={DrawingTest} />
         <Stack.Screen name="DrawingUpload" component={DrawingUpload} />

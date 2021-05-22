@@ -10,7 +10,7 @@ import {
   FlatList,
   ImageBackground,
 } from 'react-native';
-import {RNCamera} from 'react-native-camera';
+// import {RNCamera} from 'react-native-camera';
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
@@ -26,7 +26,7 @@ const DrawingUpload = ({navigation}) => {
             style={styles.container2}>
             <View style={styles.firstCard}>
               <View style={styles.container22}>
-                <RNCamera
+                {/* <RNCamera
                   ref={ref => {
                     // this.camera = ref;
                   }}
@@ -48,7 +48,7 @@ const DrawingUpload = ({navigation}) => {
                   // onGoogleVisionBarcodesDetected={({barcodes}) => {
                   //   console.log(barcodes);
                   // }}
-                />
+                /> */}
               </View>
               <Image
                 style={{height: '100%', width: '100%'}}

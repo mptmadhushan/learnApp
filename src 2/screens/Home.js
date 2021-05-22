@@ -35,30 +35,26 @@ const Home = ({navigation}) => {
               </View>
             </TouchableOpacity>
 
-            <View style={styles.container3}>
-              <TouchableOpacity
-                style={styles.secondCard}
-                onPress={() => {
-                  navigation.navigate('Object');
-                }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Quiz');
+              }}
+              style={styles.container3}>
+              <View style={styles.secondCard}>
                 <Image
                   style={{height: '60%', width: '50%'}}
                   source={require('../assets/flame-training.png')}
                 />
-                <Text style={styles.title2}>Object Ditection</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.secondCard}
-                onPress={() => {
-                  navigation.navigate('Speech');
-                }}>
+                <Text style={styles.title2}>IQ</Text>
+              </View>
+              <View style={styles.secondCard}>
                 <Image
                   style={{height: '60%', width: '50%'}}
                   source={require('../assets/clip-reading-of-books-1.png')}
                 />
-                <Text style={styles.title2}>Speech Training</Text>
-              </TouchableOpacity>
-            </View>
+                <Text style={styles.title2}>Quiz</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </ImageBackground>
       </SafeAreaView>
