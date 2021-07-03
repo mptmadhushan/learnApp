@@ -1,75 +1,108 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
+  Modal,
   Image,
   FlatList,
   ImageBackground,
 } from 'react-native';
-// import {RNCamera} from 'react-native-camera';
+import {RNCamera} from 'react-native-camera';
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
 const DrawingUpload = ({navigation}) => {
+  const [modalVisible, setModalVisible] = useState(true);
+  let camera;
+
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.containerNew}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('OnBoard');
-            }}
-            style={styles.container2}>
-            <View style={styles.firstCard}>
-              <View style={styles.container22}>
-                {/* <RNCamera
-                  ref={ref => {
-                    // this.camera = ref;
-                  }}
-                  style={styles.preview}
-                  type={RNCamera.Constants.Type.front}
-                  flashMode={RNCamera.Constants.FlashMode.on}
-                  androidCameraPermissionOptions={{
-                    title: 'Permission to use camera',
-                    message: 'We need your permission to use your camera',
-                    buttonPositive: 'Ok',
-                    buttonNegative: 'Cancel',
-                  }}
-                  androidRecordAudioPermissionOptions={{
-                    title: 'Permission to use audio recording',
-                    message: 'We need your permission to use your audio',
-                    buttonPositive: 'Ok',
-                    buttonNegative: 'Cancel',
-                  }}
-                  // onGoogleVisionBarcodesDetected={({barcodes}) => {
-                  //   console.log(barcodes);
-                  // }}
-                /> */}
+        <ImageBackground
+          style={styles.containerNew}
+          source={require('../assets/drawingUp.jpg')}>
+          <View style={styles.containerNew}>
+            <View
+              style={{
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: COLORS.fourth,
+                padding: 10,
+              }}>
+              <Text
+                style={{color: COLORS.white, fontWeight: 'bold', fontSize: 20}}>
+                Please Point Camera
+              </Text>
+            </View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalText}>
+                    please point the camera to your drawing. and then press
+                    capture to continue in the process.
+                  </Text>
+                  <Image
+                    style={{width: 300, resizeMode: 'contain'}}
+                    source={require('../assets/captureDrawing.gif')}
+                  />
+                  <TouchableOpacity
+                    style={styles.buttonStyle2m}
+                    activeOpacity={0.5}
+                    onPress={() => setModalVisible(!modalVisible)}>
+                    <Text style={styles.buttonTextStyle}>close</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
+            </Modal>
+            <RNCamera
+              ref={ref => (camera = ref)}
+              style={{flex: 1}}
+              type={RNCamera.Constants.Type.front}
+              flashMode={RNCamera.Constants.FlashMode.on}
+              androidCameraPermissionOptions={{
+                title: 'Permission to use camera',
+                message: 'We need your permission to use your camera',
+                buttonPositive: 'Ok',
+                buttonNegative: 'Cancel',
+              }}
+              androidRecordAudioPermissionOptions={{
+                title: 'Permission to use audio recording',
+                message: 'We need your permission to use your audio',
+                buttonPositive: 'Ok',
+                buttonNegative: 'Cancel',
+              }}
+            />
+            {/* <ImageBackground
+              style={styles.container22}
+              source={require('../assets/DrawingChameleon.jpeg')}>
+              
+            </ImageBackground> */}
+          </View>
+
+          <View style={styles.container2}>
+            <View style={styles.firstCard}>
               <Image
                 style={{height: '100%', width: '100%'}}
                 source={require('../assets/CAMERA.png')}
               />
               <TouchableOpacity
-                style={styles.buttonStyle}
-                activeOpacity={0.5}
-                // onPress={() => navigation.navigate('Home')}
-              >
-                <Text style={styles.buttonTextStyle}>CAPTURE</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
                 style={styles.buttonStyle2}
                 activeOpacity={0.5}
                 onPress={() => navigation.navigate('DrawingResults')}>
-                <Text style={styles.buttonTextStyle}>UPLOAD IMAGE</Text>
+                <Text style={styles.buttonTextStyle}>Capture</Text>
               </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </ImageBackground>
       </SafeAreaView>
     );
   }
@@ -157,9 +190,6 @@ const styles = StyleSheet.create({
   },
   containerNew: {
     flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
   },
   firstCard: {
     display: 'flex',
@@ -202,10 +232,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container22: {
+    borderColor: 'red',
     height: SIZES.height / 4,
-    width: SIZES.width / 2,
-    backgroundColor: 'black',
-    marginBottom: 20,
+    width: SIZES.width / 1.5,
+    borderRadius: 30,
+    marginTop: SIZES.height / 5,
+    marginLeft: SIZES.width / 10,
   },
   container3: {
     flex: 1,
@@ -261,6 +293,44 @@ const styles = StyleSheet.create({
   textStyle: {
     color: 'white',
     padding: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#111',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: -15,
+    textAlign: 'left',
+    color: '#a1a1a1',
+  },
+  buttonStyle2m: {
+    backgroundColor: COLORS.fourth,
+    borderWidth: 0,
+    color: COLORS.third,
+    borderColor: '#00BFA6',
+    height: 30,
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginTop: -20,
   },
 });
 

@@ -18,42 +18,20 @@ const Home = ({navigation}) => {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
-          style={{flex: 1}}
-          source={require('../assets/images/pngtree-cartoon-kid-meadow-green-background-material-image_124473.jpg')}>
+          style={{flex: 1, backgroundColor: COLORS.primary}}
+          source={require('../assets/kisspng-cartoon-house-drawing-2017-cartoon-tree-house-road-5a83c9eb52b914.6045599315185863473388.png')}>
           <View style={styles.containerNew}>
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('Quiz');
-              }}
-              style={styles.container2}>
-              <View style={styles.firstCard}>
-                <Image
-                  style={{height: '60%', width: '50%'}}
-                  source={require('../assets/clip-applying-to-university-online.png')}
-                />
-                <Text style={styles.title}>e-learning App</Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Quiz');
-              }}
-              style={styles.container3}>
-              <View style={styles.secondCard}>
-                <Image
-                  style={{height: '60%', width: '50%'}}
-                  source={require('../assets/flame-training.png')}
-                />
-                <Text style={styles.title2}>IQ</Text>
-              </View>
-              <View style={styles.secondCard}>
-                <Image
-                  style={{height: '60%', width: '50%'}}
-                  source={require('../assets/clip-reading-of-books-1.png')}
-                />
-                <Text style={styles.title2}>Quiz</Text>
-              </View>
+                navigation.navigate('IQ');
+              }}>
+              <ImageBackground
+                style={{height: '100%', width: '100%'}}
+                source={require('../assets/teacher.png')}>
+                <Text style={styles.title}>
+                  Tap! {'\n'}to start IQ{'\n'}TEST
+                </Text>
+              </ImageBackground>
             </TouchableOpacity>
           </View>
         </ImageBackground>
@@ -66,25 +44,14 @@ const Home = ({navigation}) => {
 
 const styles = StyleSheet.create({
   containerNew: {
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
+    height: SIZES.height / 2,
+    marginTop: SIZES.height / 3,
   },
   firstCard: {
     display: 'flex',
-    height: SIZES.height / 4,
+    height: SIZES.height / 6,
     width: '80%',
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
-  },
-  secondCard: {
-    display: 'flex',
-    height: SIZES.height / 5,
-    width: '40%',
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.fourth,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
@@ -101,27 +68,19 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'space-around',
   },
   container2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  container3: {
-    flex: 1,
-    marginTop: -SIZES.height / 3,
-    width: SIZES.width,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
   title: {
-    marginTop: 0.16,
-    fontSize: 25,
-    padding: 15,
-    color: COLORS.secondary,
-    fontWeight: 'bold',
+    fontFamily: 'SMARC___',
+    marginTop: SIZES.height / 8.5,
+    fontSize: 35,
+    marginRight: SIZES.width / 2.7,
+    color: COLORS.white,
+    // fontWeight: 'bold',
     textAlign: 'center',
   },
   title2: {
@@ -130,14 +89,6 @@ const styles = StyleSheet.create({
     color: COLORS.secondary,
     fontWeight: 'bold',
     textAlign: 'center',
-  },
-  contentCenter: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textStyle: {
-    color: 'white',
-    padding: 10,
   },
 });
 

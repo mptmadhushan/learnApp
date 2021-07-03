@@ -44,7 +44,7 @@ const RegisterScreen = ({navigation}) => {
                 style={{
                   width: '100%',
                   height: 250,
-                  margin: 30,
+                  margin: 10,
                 }}
               />
             </View>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 35,
     marginRight: 35,
-    margin: 10,
+    margin: 5,
   },
   buttonStyle: {
     backgroundColor: COLORS.primary,

@@ -18,40 +18,33 @@ const OnBoard = ({navigation}) => {
       <ImageBackground
         style={{flex: 1}}
         source={require('../assets/images/pngtree-cartoon-kid-meadow-green-background-material-image_124473.jpg')}>
-        <View style={styles.container}>
-          <Text style={styles.title}>
-            Welcome {'\n'}to {'\n'}
-            xyz app
-          </Text>
-          <View style={styles.contentCenter}>
-            {/* <Image
-              source={require('../assets/images/undraw_fatherhood_7i19.png')}
+        <View style={styles.contentCenter}>
+          <View style={{flex: 1, alignItems: 'center'}}>
+            <Text style={{...FONTS.titleHome}}>Welcome to Walipilla</Text>
+            <Image
+              source={require('../assets/images/logo-wali.png')}
               style={{
-                width: '70%',
-                height: '60%',
+                width: SIZES.width * 0.8,
+                marginTop: 50,
               }}
-            /> */}
-            <TouchableOpacity
-              onPress={() => {
-                // createUser();
-
-                navigation.navigate('Login');
-
-                // navigation.navigate('Home');
-              }}
-              style={{
-                marginTop: 100,
-                elevation: 8,
-                borderRadius: 30,
-                paddingVertical: 15,
-                paddingHorizontal: 25,
-                marginBottom: 20,
-                justifyContent: 'center',
-                backgroundColor: COLORS.third,
-              }}>
-              <Text style={{...FONTS.h3, color: COLORS.white}}>Let's Go</Text>
-            </TouchableOpacity>
+            />
           </View>
+          <TouchableOpacity
+            onPress={() => {
+              // navigation.navigate('Home');
+              navigation.navigate('Login');
+            }}
+            style={{
+              elevation: 8,
+              borderRadius: 30,
+              paddingVertical: 15,
+              paddingHorizontal: 25,
+              marginBottom: 50,
+              justifyContent: 'center',
+              backgroundColor: '#007795',
+            }}>
+            <Text style={{...FONTS.h3, color: COLORS.white}}>Let's Go</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -63,16 +56,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    marginTop: 79,
-    fontSize: 45,
+    fontFamily: 'butterfly-kids.regular',
+    fontSize: 25,
     margin: 15,
     color: 'black',
     fontWeight: 'bold',
     textAlign: 'center',
   },
   contentCenter: {
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    flexDirection: 'column',
+    height: SIZES.height,
   },
   textStyle: {
     color: 'white',

@@ -134,6 +134,7 @@ android {
         applicationId "com.learnapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        missingDimensionStrategy 'react-native-camera', 'general'
         versionCode 1
         versionName "1.0"
     }
@@ -146,6 +147,12 @@ android {
         }
     }
     signingConfigs {
+           release {
+      storeFile file('your_key_name.keystore')
+      storePassword 'Passport@1'
+      keyAlias 'your_key_alias'
+      keyPassword 'Passport@1'
+    }
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
@@ -184,6 +191,18 @@ android {
 }
 
 dependencies {
+   implementation 'com.facebook.fresco:fresco:2.4.0'
+ implementation 'com.facebook.fresco:animated-gif:2.4.0'
+
+  // For WebP support, including animated WebP
+  implementation 'com.facebook.fresco:animated-webp:2.4.0'
+  implementation 'com.facebook.fresco:webpsupport:2.4.0'
+
+  // For WebP support, without animations
+  implementation 'com.facebook.fresco:webpsupport:2.4.0'
+
+  // Provide the Android support library (you might already have this or a similar dependency)
+  implementation 'com.android.support:support-core-utils:24.2.1'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

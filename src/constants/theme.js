@@ -3,10 +3,10 @@ const {width, height} = Dimensions.get('window');
 
 export const COLORS = {
   // base colors
-  primary: '#1ac0c6', // orange
-  secondary: '#353a65', // gray
-  third: '#dee0e6', // gray
-  fourth: '#ff6150', // gray
+  primary: '#1ea896', // orange
+  secondary: '#4c5454', // gray
+  third: '#523f38', // gray
+  fourth: '#ff715b', // gray
 
   // colors
   black: '#1E1F20',
@@ -53,13 +53,27 @@ export const FONTS = {
   },
   h1: {fontFamily: 'Roboto-Black', fontSize: SIZES.h1, lineHeight: 36},
   h2: {fontFamily: 'Roboto-Bold', fontSize: SIZES.h2, lineHeight: 30},
-  h3: {fontFamily: 'Roboto-Bold', fontSize: SIZES.h3, lineHeight: 22},
+  h3: {fontFamily: 'Oh Whale - TTF', fontSize: SIZES.h3, lineHeight: 22},
   h4: {fontFamily: 'Roboto-Bold', fontSize: SIZES.h4, lineHeight: 22},
   body1: {fontFamily: 'Roboto-Regular', fontSize: SIZES.body1, lineHeight: 36},
   body2: {fontFamily: 'Roboto-Regular', fontSize: SIZES.body2, lineHeight: 30},
   body3: {fontFamily: 'Roboto-Regular', fontSize: SIZES.body3, lineHeight: 22},
   body4: {fontFamily: 'Roboto-Regular', fontSize: SIZES.body4, lineHeight: 22},
   body5: {fontFamily: 'Roboto-Regular', fontSize: SIZES.body5, lineHeight: 22},
+  headerTitle: {
+    fontFamily: 'LuckiestGuy-Regular',
+    fontSize: SIZES.body5,
+    lineHeight: 22,
+  },
+  titleHome: {
+    fontFamily: 'wild-font',
+    fontSize: 42,
+    textAlign: 'center',
+    marginTop: 40,
+    color: '#007795',
+
+    // fontWeight: 'bold',
+  },
 };
 
 const appTheme = {COLORS, SIZES, FONTS};

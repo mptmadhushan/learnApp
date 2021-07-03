@@ -88,7 +88,7 @@ const LoginScreen = ({navigation}) => {
               style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={() => navigation.navigate('Home')}>
-              <Text style={styles.buttonTextStyle}>LOGIN</Text>
+              <Text style={styles.buttonTextStyle}>Sign In</Text>
             </TouchableOpacity>
             <Text
               style={styles.registerTextStyle}
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   buttonTextStyle: {
+    fontFamily: 'Oh Whale - TTF',
     color: '#FFFFFF',
     paddingVertical: 10,
     fontSize: 16,
@@ -146,6 +147,7 @@ const styles = StyleSheet.create({
     borderColor: '#dadae8',
   },
   registerTextStyle: {
+    fontFamily: 'Oh Whale - TTF',
     color: '#4c5a5b',
     textAlign: 'center',
     fontWeight: 'bold',

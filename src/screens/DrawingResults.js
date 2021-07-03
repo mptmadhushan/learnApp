@@ -32,13 +32,16 @@ const DrawingResults = ({navigation}) => {
                   source={require('../assets/drawRes.png')}
                 />
                 <View
-                  style={{backgroundColor: COLORS.secondary, borderRadius: 30}}>
+                  style={{
+                    backgroundColor: COLORS.secondary,
+                    borderRadius: 30,
+                    padding: 10,
+                  }}>
                   <Text style={styles.title}>Drawing Results.!</Text>
-                  <Text style={styles.title3}>SCORE: 9.6</Text>
-                  <Text style={styles.title3}>OVERALL PERFORMANCE: 9.6</Text>
+                  <Text style={styles.title3}>ACCURACY: 9.6</Text>
                   <Text style={styles.title3}>
-                    COMMENTS: Eu culpa exercitation ut reprehenderit occaecat
-                    deserunt tempor elit ullamco sint sint.
+                    "Skill full" - your's child drawing skills are amazing,
+                    rather than other children of this age.
                   </Text>
                   <Text style={styles.title3}>
                     IMPROVEMENTS: Qui ea amet laboris mollit mollit occaecat.
@@ -47,8 +50,8 @@ const DrawingResults = ({navigation}) => {
                 <TouchableOpacity
                   style={styles.buttonStyle}
                   activeOpacity={0.5}
-                  onPress={() => navigation.navigate('Home')}>
-                  <Text style={styles.buttonTextStyle}>HOME</Text>
+                  onPress={() => navigation.navigate('FinalPerformance')}>
+                  <Text style={styles.buttonTextStyle}>Next</Text>
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primary,
   },
   container2: {
     flex: 1,
@@ -197,14 +200,14 @@ const styles = StyleSheet.create({
     // marginTop: -21,
     fontSize: 25,
     padding: 15,
-    color: COLORS.third,
+    color: COLORS.white,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   title3: {
     fontSize: 15,
     padding: 5,
-    color: COLORS.third,
+    color: COLORS.white,
     textAlign: 'center',
   },
   title2: {

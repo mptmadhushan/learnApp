@@ -1,5 +1,7 @@
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
+
 import {
   SafeAreaView,
   View,
@@ -7,50 +9,126 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Modal,
   FlatList,
   ImageBackground,
 } from 'react-native';
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
-const DrawingTest = ({navigation}) => {
-  const n = 8;
+const Quiz = ({navigation}) => {
+  const [modalVisible, setModalVisible] = useState(true);
+
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={{flex: 1}}
-          source={require('../assets/images/ge.jpg')}>
+          source={require('../assets/drawbacknew.jpg')}>
           <View style={styles.containerNew}>
-            <TouchableOpacity
-              onPress={() => {
-                // navigation.navigate('OnBoard');
-              }}
-              style={styles.container2}>
-              <View style={styles.firstCard}>
-                <Image
-                  style={{height: '100%', width: '100%'}}
-                  source={require('../assets/DrawingChameleon.jpeg')}
-                />
-              </View>
-            </TouchableOpacity>
-            <View style={styles.container2}>
-              <View style={styles.container4}>
-                <View style={styles.container3}>
-                  <View style={styles.answerBtn}>
-                    <Text style={styles.speechText}>Let's Draw!</Text>
-                    <Text style={styles.title3}>
-                      Complete Speech Training{'\n'}To get Rewards{'\n'}{' '}
-                      Complete Speech Training{'\n'}
-                      To get Rewards
+            <View
+              style={{
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: COLORS.fourth,
+                padding: 10,
+              }}>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  // fontWeight: 'bold',
+                  fontSize: 20,
+                  fontFamily: 'Oh Whale - TTF',
+                }}>
+                Let's draw this picture 🖌️
+              </Text>
+            </View>
+            <View style={styles.firstCard}>
+              <ImageBackground
+                style={{height: '100%', width: '100%'}}
+                source={require('../assets/DrawingChameleon.jpeg')}></ImageBackground>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}>
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <Text style={styles.modalText}>
+                      Please Draw the image showing in screen on paper. and then
+                      press continue
                     </Text>
+                    <Image
+                      style={{width: 300, height: 400, resizeMode: 'contain'}}
+                      source={require('../assets/drawingKid.gif')}
+                    />
+                    <TouchableOpacity
+                      style={styles.buttonStyle2m}
+                      activeOpacity={0.5}
+                      onPress={() => setModalVisible(!modalVisible)}>
+                      <Text style={styles.buttonTextStyle}>close</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
+              </Modal>
+              <View
+                style={{
+                  // display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                  width: SIZES.width,
+                  height: SIZES.height / 3,
+                }}>
+                <View
+                  style={{
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '50%',
+                    justifyContent: 'center',
+                    backgroundColor: COLORS.primary,
+                    padding: 20,
+                    borderRadius: 30,
+                    marginLeft: SIZES.width / 5,
+                  }}>
+                  <Text
+                    style={{
+                      color: COLORS.white,
+                      fontFamily: 'Oh Whale - TTF',
+                      fontSize: 15,
+                      textAlign: 'center',
+                    }}>
+                    Dolore ea cillum deserunt consequat magna ullamco
+                    reprehenderit ex in.
+                  </Text>
+                </View>
+                <ImageBackground
+                  style={{height: '100%', width: '70%'}}
+                  source={require('../assets/painting.png')}>
+                  <View
+                    style={{
+                      textAlign: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 10,
+                    }}></View>
+                </ImageBackground>
+              </View>
+              <View
+                style={{
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
                 <TouchableOpacity
                   style={styles.buttonStyle}
                   activeOpacity={0.5}
                   onPress={() => navigation.navigate('DrawingUpload')}>
-                  <Text style={styles.buttonTextStyle}>Next</Text>
+                  <Text style={styles.buttonTextStyle}>Continue</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -67,14 +145,10 @@ const styles = StyleSheet.create({
   buttonTextStyle: {
     color: '#FFFFFF',
     fontSize: 16,
-  },
-  speechText: {
-    color: '#FFFFFF',
-    fontSize: 29,
-    fontWeight: 'bold',
+    fontFamily: 'Oh Whale - TTF',
   },
   buttonStyle: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.fourth,
     borderWidth: 0,
     color: COLORS.third,
     borderColor: '#00BFA6',
@@ -105,8 +179,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   answerBtn: {
-    height: SIZES.height / 5,
-    width: SIZES.width / 1.5,
+    height: SIZES.height / 20,
+    width: SIZES.width / 2.5,
     backgroundColor: COLORS.fourth,
     justifyContent: 'center',
     alignItems: 'center',
@@ -114,20 +188,16 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   containerNew: {
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
+    // flex: 1,
+    // display: 'flex',
+    // justifyContent: 'center',
+    // flexDirection: 'column',
   },
   firstCard: {
-    display: 'flex',
-    height: SIZES.height / 3,
-    width: '80%',
-    flexDirection: 'row',
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
+    // flex: 2,
+    height: SIZES.height / 2.6,
+    width: '100%',
+    padding: 5,
   },
   secondCard: {
     display: 'flex',
@@ -152,7 +222,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container2: {
-    flex: 1,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -212,6 +281,44 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 10,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#111',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: -15,
+    textAlign: 'left',
+    color: '#a1a1a1',
+  },
+  buttonStyle2m: {
+    backgroundColor: COLORS.fourth,
+    borderWidth: 0,
+    color: COLORS.third,
+    borderColor: '#00BFA6',
+    height: 30,
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginTop: -20,
+  },
 });
 
-export default DrawingTest;
+export default Quiz;

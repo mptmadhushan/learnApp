@@ -19,48 +19,50 @@ const QuizResults = ({navigation}) => {
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={{flex: 1}}
-          source={require('../assets/CONGRATS.png')}>
-          <View style={styles.containerNew}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('OnBoard');
-              }}
-              style={styles.container2}>
-              <View style={styles.firstCard}>
-                <Image
-                  style={{height: '100%', width: '50%'}}
-                  source={require('../assets/conlogo.png')}
-                />
-                <View>
-                  <Text style={styles.title}>
-                    Congratulations.!{'\n'}You got 9/10
-                  </Text>
-                  <Text style={styles.title3}>
-                    Veniam aliquip irure culpa aute aliqua nostrud magna velit
-                    id veniam fugiat. Do voluptate tempor dolor adipisicing et
-                    ex eiusmod ea aliquip. Proident sint qui laborum dolor Lorem
-                    ullamco sint ad incididunt aliquip aute irure ut deserunt.
-                    Quis velit dolore adipisicing ullamco dolore sit labore duis
-                    adipisicing aute cupidatat adipisicing. Deserunt esse aliqua
-                    aute mollit exercitation incididunt eiusmod magna cupidatat
-                    sunt minim quis occaecat non.
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.buttonStyle}
-                    activeOpacity={0.5}
-                    onPress={() => navigation.navigate('Home')}>
-                    <Text style={styles.buttonTextStyle}>HOME</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.buttonStyle2}
-                    activeOpacity={0.5}
-                    onPress={() => navigation.navigate('LeaderBoard')}>
-                    <Text style={styles.buttonTextStyle}>Leaderboard</Text>
-                  </TouchableOpacity>
+          source={require('../assets/6ob.gif')}>
+          <ImageBackground
+            style={{flex: 1}}
+            source={require('../assets/CONGRATS.png')}>
+            <View style={styles.containerNew}>
+              <TouchableOpacity style={styles.container2}>
+                <View style={styles.firstCard}>
+                  <Image
+                    style={{height: '100%', width: '50%'}}
+                    source={require('../assets/conlogo.png')}
+                  />
+                  <View>
+                    <Text style={styles.title}>
+                      Congratulations.!{'\n'}You got 9/10
+                    </Text>
+                    {/* <Text style={styles.title3}>
+                      Veniam aliquip irure culpa aute aliqua nostrud magna velit
+                      id veniam fugiat. Do voluptate tempor dolor adipisicing et
+                      ex eiusmod ea aliquip. Proident sint qui laborum dolor
+                      Lorem ullamco sint ad incididunt aliquip aute irure ut
+                      deserunt. Quis velit dolore adipisicing ullamco dolore sit
+                      labore duis adipisicing aute cupidatat adipisicing.
+                      Deserunt esse aliqua aute mollit exercitation incididunt
+                      eiusmod magna cupidatat sunt minim quis occaecat non.
+                    </Text> */}
+                    <TouchableOpacity
+                      style={styles.buttonStyle}
+                      activeOpacity={0.5}
+                      onPress={() => navigation.navigate('LeaderBoard')}>
+                      <Text style={styles.buttonTextStyle}>
+                        Overall performance
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.buttonStyle2}
+                      activeOpacity={0.5}
+                      onPress={() => navigation.navigate('Home')}>
+                      <Text style={styles.buttonTextStyle}>Home</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          </View>
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
         </ImageBackground>
       </SafeAreaView>
     );
@@ -71,11 +73,12 @@ const QuizResults = ({navigation}) => {
 
 const styles = StyleSheet.create({
   buttonTextStyle: {
+    fontFamily: 'Oh Whale - TTF',
     color: '#FFFFFF',
     fontSize: 16,
   },
   buttonStyle: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.secondary,
     borderWidth: 0,
     color: COLORS.third,
     borderColor: '#00BFA6',
@@ -139,6 +142,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     height: SIZES.height / 4,
     width: '80%',
+    marginTop: SIZES.width / 4,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -165,7 +169,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primary,
   },
   container2: {
     flex: 1,
@@ -204,7 +208,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     padding: 15,
     color: COLORS.third,
-    fontWeight: 'bold',
+    fontFamily: 'Oh Whale - TTF',
     textAlign: 'center',
   },
   title3: {

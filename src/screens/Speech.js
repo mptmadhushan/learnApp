@@ -1,88 +1,146 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
   Text,
+  Modal,
   StyleSheet,
   TouchableOpacity,
   Image,
   FlatList,
   ImageBackground,
 } from 'react-native';
-
+import Tts from 'react-native-tts';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
-const Speech = ({navigation}) => {
+const Iq = ({navigation}) => {
+  const handlePlay = () => {
+    Tts.speak('Dog', {
+      androidParams: {
+        KEY_PARAM_PAN: -1,
+        KEY_PARAM_VOLUME: 0.5,
+        KEY_PARAM_STREAM: 'STREAM_MUSIC',
+      },
+    });
+  };
   const n = 8;
+  const [modalVisible, setModalVisible] = useState(true);
+  useEffect(() => {
+    // Tts.speak('Dog', {
+    //   androidParams: {
+    //     KEY_PARAM_PAN: -1,
+    //     KEY_PARAM_VOLUME: 1,
+    //     KEY_PARAM_STREAM: 'STREAM_MUSIC',
+    //   },
+    // });
+    // Update the document title using the browser API
+    // document.title = `You clicked ${count} times`;
+  }, []);
+  const handlePlayOnClose = () => {
+    setModalVisible(!modalVisible);
+    Tts.speak('Dog', {
+      androidParams: {
+        KEY_PARAM_PAN: -1,
+        KEY_PARAM_VOLUME: 0.5,
+        KEY_PARAM_STREAM: 'STREAM_MUSIC',
+      },
+    });
+  };
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={{flex: 1}}
-          source={require('../assets/images/ge.jpg')}>
-          <View style={styles.containerNew}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('OnBoard');
-              }}
-              style={styles.container2}>
-              <View style={styles.firstCard}>
+          source={require('../assets/yelback.jpg')}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>
+                  Please read the word loud and clear
+                </Text>
                 <Image
-                  style={{height: '100%', width: '50%'}}
-                  source={require('../assets/speak.png')}
+                  style={{width: 300, height: 400, resizeMode: 'contain'}}
+                  source={require('../assets/images/help/4.png')}
                 />
-                <View>
-                  <Text style={styles.title}>
-                    Speech Training{'\n'}To get Rewards
-                  </Text>
-                  <Text style={styles.title3}>
-                    Complete Speech Training{'\n'}To get Rewards{'\n'} Complete
-                    Speech Training{'\n'}
-                    To get Rewards
-                  </Text>
-                </View>
+                <TouchableOpacity
+                  style={styles.buttonStyle2m}
+                  activeOpacity={0.5}
+                  onPress={() => handlePlayOnClose()}>
+                  <Text style={styles.buttonTextStyle}>close</Text>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-            <View style={styles.container2}>
-              {/* <Text style={{color: COLORS.third}}>Please elect answer</Text> */}
-              <View style={styles.container3}>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>1</Text>
+            </View>
+          </Modal>
+          <View style={styles.containerNew}>
+            <View
+              style={{
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: COLORS.fourth,
+                padding: 10,
+                borderRadius: 30,
+                width: '80%',
+                marginTop: SIZES.height / 15,
+              }}>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: 'Oh Whale - TTF',
+                  fontSize: 20,
+                }}>
+                Let's Speak..!
+              </Text>
+            </View>
+            <View style={styles.firstCard}>
+              <ImageBackground
+                style={{height: '100%', width: '100%'}}
+                source={require('../assets/speechback.png')}>
+                <View
+                  style={{
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: SIZES.height / 4,
+                  }}>
+                  <Image
+                    style={{width: 100, height: 100, resizeMode: 'contain'}}
+                    source={require('../assets/dog.png')}
+                  />
+                  <Text
+                    style={{
+                      color: COLORS.secondary,
+                      fontSize: 50,
+                      fontFamily: 'Schoolbell',
+                    }}>
+                    DOG
+                  </Text>
                 </View>
-                <View style={styles.number1}>
-                  <Text style={{color: COLORS.third}}>2</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>3</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>4</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>5</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>6</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>7</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>8</Text>
-                </View>
-              </View>
-              <View style={styles.container4}>
-                <View style={styles.container3}>
-                  <View style={styles.answerBtn}>
-                    <Text style={styles.speechText}>PIGEON</Text>
-                  </View>
-                </View>
+              </ImageBackground>
+              <View
+                style={{
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
                 <TouchableOpacity
                   style={styles.buttonStyle}
                   activeOpacity={0.5}
-                  onPress={() => navigation.navigate('SpeechResults')}>
-                  <Text style={styles.buttonTextStyle}>Next</Text>
+                  onPress={() => handlePlay()}>
+                  <Text style={styles.buttonTextStyle}>Re-play</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  activeOpacity={0.5}
+                  onPress={() => navigation.navigate('SpeechResult')}>
+                  <Text style={styles.buttonTextStyle}>Continue</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -99,14 +157,10 @@ const styles = StyleSheet.create({
   buttonTextStyle: {
     color: '#FFFFFF',
     fontSize: 16,
-  },
-  speechText: {
-    color: '#FFFFFF',
-    fontSize: 29,
-    fontWeight: 'bold',
+    fontFamily: 'Oh Whale - TTF',
   },
   buttonStyle: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.fourth,
     borderWidth: 0,
     color: COLORS.third,
     borderColor: '#00BFA6',
@@ -117,7 +171,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginLeft: 35,
     marginRight: 35,
-    marginTop: 20,
+    // marginTop: 20,
     marginBottom: 25,
   },
   number: {
@@ -137,8 +191,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   answerBtn: {
-    height: SIZES.height / 10,
-    width: SIZES.width / 1.5,
+    height: SIZES.height / 20,
+    width: SIZES.width / 2.5,
     backgroundColor: COLORS.fourth,
     justifyContent: 'center',
     alignItems: 'center',
@@ -146,20 +200,17 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   containerNew: {
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
+    // flex: 1,
+    // display: 'flex',
+    // justifyContent: 'center',
+    // flexDirection: 'column',
+    alignItems: 'center',
   },
   firstCard: {
-    display: 'flex',
-    height: SIZES.height / 4,
-    width: '80%',
-    flexDirection: 'row',
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
+    // flex: 2,
+    height: SIZES.height / 1.6,
+    width: '100%',
+    padding: 5,
   },
   secondCard: {
     display: 'flex',
@@ -169,6 +220,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
+  },
+  modalText: {
+    marginBottom: -15,
+    textAlign: 'left',
+    color: '#a1a1a1',
   },
   shadow: {
     shadowColor: '#000',
@@ -184,7 +240,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container2: {
-    flex: 1,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -244,6 +299,38 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 10,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#111',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonStyle2m: {
+    backgroundColor: COLORS.fourth,
+    borderWidth: 0,
+    color: COLORS.third,
+    borderColor: '#00BFA6',
+    height: 30,
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+  },
 });
 
-export default Speech;
+export default Iq;

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,96 +8,232 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Modal,
   ImageBackground,
 } from 'react-native';
+import useSound from 'react-native-use-sound';
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
 const Quiz = ({navigation}) => {
-  const n = 8;
+  const questions = [
+    {
+      questionText: 'What is the capital of France?',
+      answerOptions: [
+        {answerText: 'New York', isCorrect: false},
+        {answerText: 'Paris', isCorrect: true},
+        {answerText: 'Dublin', isCorrect: false},
+      ],
+    },
+    {
+      questionText: 'Who is CEO of Tesla?',
+      answerOptions: [
+        {answerText: 'Jeff Bezos', isCorrect: false},
+        {answerText: 'Elon Musk', isCorrect: true},
+        {answerText: 'Tony Stark', isCorrect: false},
+      ],
+    },
+    {
+      questionText: 'The iPhone was created by which company?',
+      answerOptions: [
+        {answerText: 'Apple', isCorrect: true},
+        {answerText: 'Intel', isCorrect: false},
+        {answerText: 'Microsoft', isCorrect: false},
+      ],
+    },
+    {
+      questionText: 'How many Harry Potter books are there?',
+      answerOptions: [
+        {answerText: '1', isCorrect: false},
+        {answerText: '4', isCorrect: false},
+        {answerText: '7', isCorrect: true},
+      ],
+    },
+  ];
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showScore, setShowScore] = useState(false);
+  const [score, setScore] = useState(0);
+  const [currQuiz, setCurrQuiz] = useState(1);
+  const [modalVisible, setModalVisible] = useState(true);
+
+  const numbers = [1, 2, 3, 4];
+  const [play, pause, stop, data] = useSound(
+    'https://assets.mixkit.co/sfx/preview/mixkit-tick-tock-clock-timer-1045.mp3',
+  );
+  const handlePlay = () => {
+    console.log('play');
+    play();
+  };
+  const navi = () => {
+    console.log('navi');
+    navigation.navigate('QuizResults');
+  };
+
+  const handleAnswerOptionClick = isCorrect => {
+    console.log(currQuiz);
+    if (currQuiz < 4) {
+      if (!isCorrect) {
+        console.log('wrong');
+        handlePlay();
+      }
+      if (isCorrect) {
+        console.log('correct');
+        handlePlay();
+        setScore(score + 1);
+      }
+      setCurrQuiz(currQuiz + 1);
+      const nextQuestion = currentQuestion + 1;
+      if (nextQuestion < questions.length) {
+        setCurrentQuestion(nextQuestion);
+      } else {
+        setShowScore(true);
+      }
+    } else {
+      pause();
+      setTimeout(() => {
+        navi();
+      }, 200);
+    }
+  };
+  const handlePlay2 = () => {
+    setModalVisible(!modalVisible);
+  };
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={{flex: 1}}
-          source={require('../assets/images/ge.jpg')}>
-          <View style={styles.containerNew}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('OnBoard');
-              }}
-              style={styles.container2}>
-              <View style={styles.firstCard}>
+          source={require('../assets/qback.jpg')}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>
+                  Number of questions and current question is highlighted
+                </Text>
                 <Image
-                  style={{height: '100%', width: '50%'}}
-                  source={require('../assets/3d-flame-student-presenting-a-diagram.png')}
+                  style={{width: 300, resizeMode: 'contain'}}
+                  source={require('../assets/images/help/1.png')}
                 />
-                <View>
-                  <Text style={styles.title}>
-                    Complete Quiz{'\n'}To get Rewards
-                  </Text>
-                  <Text style={styles.title3}>
-                    Complete Quiz{'\n'}To get Rewards{'\n'} Complete Quiz{'\n'}
-                    To get Rewards
-                  </Text>
-                </View>
+                <View
+                  style={{
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 15,
+                  }}
+                />
+                <Text style={styles.modalText}> current questions</Text>
+                <Image
+                  style={{width: 300, resizeMode: 'contain'}}
+                  source={require('../assets/images/help/2.png')}
+                />
+                <Text style={styles.modalText}>
+                  These are the answers! Press the correct answer to gain score.
+                </Text>
+                <Image
+                  style={{width: 300, height: 200, resizeMode: 'contain'}}
+                  source={require('../assets/images/help/3.png')}
+                />
+                <TouchableOpacity
+                  style={styles.buttonStyle2m}
+                  activeOpacity={0.5}
+                  onPress={() => handlePlay2()}>
+                  <Text style={styles.buttonTextStyle}>close</Text>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+            </View>
+          </Modal>
+          <View style={styles.containerNew}>
             <View style={styles.container2}>
               {/* <Text style={{color: COLORS.third}}>Please elect answer</Text> */}
               <View style={styles.container3}>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>1</Text>
-                </View>
-                <View style={styles.number1}>
-                  <Text style={{color: COLORS.third}}>2</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>3</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>4</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>5</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>6</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>7</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={{color: COLORS.third}}>8</Text>
-                </View>
+                {numbers.map((number, i) => (
+                  <View
+                    key={i}
+                    style={[
+                      styles.number1,
+                      {
+                        backgroundColor:
+                          currQuiz !== number ? COLORS.primary : COLORS.fourth,
+                      },
+                    ]}>
+                    <Text style={{color: COLORS.third}}>{number}</Text>
+                  </View>
+                ))}
               </View>
-              <View style={styles.container4}>
-                <View>
-                  <Text style={{color: COLORS.third, fontWeight: 'bold'}}>
-                    How many legs does a spider have?
-                  </Text>
+            </View>
+            <View
+              style={{
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: COLORS.fourth,
+                padding: 10,
+                marginTop: SIZES.height / 15,
+              }}>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  // fontWeight: 'bold',
+                  fontSize: 20,
+                  fontFamily: 'Oh Whale - TTF',
+                }}>
+                {questions[currentQuestion].questionText}
+              </Text>
+            </View>
+            <View style={styles.firstCard}>
+              <ImageBackground
+                style={{height: '100%', width: '100%'}}
+                source={require('../assets/qizFrame.png')}>
+                <View
+                  style={{
+                    textAlign: 'center',
+                    width: '100%',
+                    height: '100%',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    justifyContent: 'space-around',
+                    // padding: 10,
+                  }}>
+                  {questions[currentQuestion].answerOptions.map(
+                    (answerOption, i) => (
+                      <TouchableOpacity
+                        key={i}
+                        onPress={() =>
+                          handleAnswerOptionClick(answerOption.isCorrect)
+                        }>
+                        <Text
+                          style={{
+                            color: COLORS.secondary,
+                            // fontWeight: 'bold',
+                            fontSize: 20,
+                            fontFamily: 'Oh Whale - TTF',
+
+                            // marginTop: SIZES.height / 10,
+                          }}>
+                          {answerOption.answerText}
+                        </Text>
+                      </TouchableOpacity>
+                    ),
+                  )}
                 </View>
-                <View style={styles.container3}>
-                  <View style={styles.answerBtn}>
-                    <Text style={{color: COLORS.third}}>One</Text>
-                  </View>
-                  <View style={styles.answerBtn}>
-                    <Text style={{color: COLORS.third}}>Five</Text>
-                  </View>
-                  <View style={styles.answerBtn}>
-                    <Text style={{color: COLORS.third}}>Eight</Text>
-                  </View>
-                  <View style={styles.answerBtn}>
-                    <Text style={{color: COLORS.third}}>Five</Text>
-                  </View>
-                </View>
+              </ImageBackground>
+              {/* <View
+                style={{
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
                 <TouchableOpacity
                   style={styles.buttonStyle}
                   activeOpacity={0.5}
                   onPress={() => navigation.navigate('QuizResults')}>
                   <Text style={styles.buttonTextStyle}>Continue</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
             </View>
           </View>
         </ImageBackground>
@@ -114,7 +250,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonStyle: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.fourth,
     borderWidth: 0,
     color: COLORS.third,
     borderColor: '#00BFA6',
@@ -154,20 +290,21 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   containerNew: {
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
+    // flex: 1,
+    // display: 'flex',
+    // justifyContent: 'center',
+    // flexDirection: 'column',
+  },
+  modalText: {
+    marginBottom: -15,
+    textAlign: 'left',
+    color: '#a1a1a1',
   },
   firstCard: {
-    display: 'flex',
-    height: SIZES.height / 4,
-    width: '80%',
-    flexDirection: 'row',
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
+    // flex: 2,
+    height: SIZES.height / 1.6,
+    width: '100%',
+    padding: 5,
   },
   secondCard: {
     display: 'flex',
@@ -192,7 +329,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container2: {
-    flex: 1,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -251,6 +387,38 @@ const styles = StyleSheet.create({
   textStyle: {
     color: 'white',
     padding: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#111',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonStyle2m: {
+    backgroundColor: COLORS.fourth,
+    borderWidth: 0,
+    color: COLORS.third,
+    borderColor: '#00BFA6',
+    height: 30,
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
   },
 });
 
