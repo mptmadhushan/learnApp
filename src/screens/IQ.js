@@ -14,10 +14,28 @@ import {
 } from 'react-native';
 import useSound from 'react-native-use-sound';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {getQuizAPI} from '../api/getQuizAPI';
 
 const Iq = ({navigation}) => {
   useEffect(() => {
-    handlePlay();
+    getQuizAPI()
+      .then(response => {
+        if (response.error) {
+          console.log('error', response.error);
+          // showToast(response.error);
+          return;
+        }
+        const {data} = response;
+        setIq(data);
+        console.log(data);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+    // handlePlay();
   }, []);
 
   const questions = [
@@ -58,10 +76,11 @@ const Iq = ({navigation}) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
+  const [iqQuiz, setIq] = useState();
   const [modalVisible, setModalVisible] = useState(true);
   const [currQuiz, setCurrQuiz] = useState(1);
 
-  const numbers = [1, 2, 3, 4];
+  const numbers = [1, 2, 3, 4, 6, 7, 8, 9, 10];
 
   const [play, pause, stop, data] = useSound(
     'https://assets.mixkit.co/sfx/preview/mixkit-tick-tock-clock-timer-1045.mp3',
@@ -76,25 +95,27 @@ const Iq = ({navigation}) => {
     play();
   };
   const navi = () => {
-    console.log('navi');
+    console.log('navi', score);
     navigation.navigate('IQResults');
   };
 
-  const handleAnswerOptionClick = isCorrect => {
+  const handleAnswerOptionClick = (selectedAns, isCorrect) => {
     console.log(currQuiz);
-    if (currQuiz < 4) {
-      if (!isCorrect) {
+    console.log(selectedAns);
+    console.log(isCorrect);
+    if (currQuiz < iqQuiz.length) {
+      if (selectedAns !== isCorrect) {
         console.log('wrong');
         // handlePlay();
       }
-      if (isCorrect) {
+      if (selectedAns === isCorrect) {
         console.log('correct');
         // handlePlay();
         setScore(score + 1);
       }
       setCurrQuiz(currQuiz + 1);
       const nextQuestion = currentQuestion + 1;
-      if (nextQuestion < questions.length) {
+      if (nextQuestion < iqQuiz.length) {
         setCurrentQuestion(nextQuestion);
       } else {
         setShowScore(true);
@@ -102,7 +123,7 @@ const Iq = ({navigation}) => {
     } else {
       pause();
       setTimeout(() => {
-        navi();
+        navi(score);
       }, 200);
     }
   };
@@ -181,32 +202,89 @@ const Iq = ({navigation}) => {
                 padding: 10,
                 marginTop: SIZES.height / 15,
               }}>
-              <Text
-                style={{
-                  color: COLORS.white,
-                  // fontWeight: 'bold',
-                  fontSize: 20,
-                  fontFamily: 'Oh Whale - TTF',
-                }}>
-                {questions[currentQuestion].questionText}
-              </Text>
+              {iqQuiz ? (
+                <Text
+                  style={{
+                    color: COLORS.white,
+                    // fontWeight: 'bold',
+                    fontSize: 20,
+                    fontFamily: 'Oh Whale - TTF',
+                  }}>
+                  {iqQuiz[currentQuestion].question}
+                </Text>
+              ) : null}
             </View>
 
             <View style={styles.firstCard}>
               <ImageBackground
                 style={{height: '100%', width: '100%'}}
                 source={require('../assets/qizFrame.png')}>
-                <View
-                  style={{
-                    textAlign: 'center',
-                    width: '100%',
-                    height: '100%',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    justifyContent: 'space-around',
-                    // padding: 10,
-                  }}>
-                  {questions[currentQuestion].answerOptions.map(
+                {iqQuiz ? (
+                  <View
+                    style={{
+                      textAlign: 'center',
+                      width: '100%',
+                      height: '100%',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      justifyContent: 'space-around',
+                      // padding: 10,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleAnswerOptionClick(
+                          iqQuiz[currentQuestion].dummy_answer1,
+                          iqQuiz[currentQuestion].answer,
+                        )
+                      }>
+                      <Text
+                        style={{
+                          color: COLORS.secondary,
+                          // fontWeight: 'bold',
+                          fontFamily: 'Oh Whale - TTF',
+                          fontSize: 20,
+                          // marginTop: SIZES.height / 10,
+                        }}>
+                        {iqQuiz[currentQuestion].dummy_answer1}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleAnswerOptionClick(
+                          iqQuiz[currentQuestion].dummy_answer2,
+                          iqQuiz[currentQuestion].answer,
+                        )
+                      }>
+                      <Text
+                        style={{
+                          color: COLORS.secondary,
+                          // fontWeight: 'bold',
+                          fontFamily: 'Oh Whale - TTF',
+                          fontSize: 20,
+                          // marginTop: SIZES.height / 10,
+                        }}>
+                        {iqQuiz[currentQuestion].dummy_answer2}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleAnswerOptionClick(
+                          iqQuiz[currentQuestion].answer,
+                          iqQuiz[currentQuestion].answer,
+                        )
+                      }>
+                      <Text
+                        style={{
+                          color: COLORS.secondary,
+                          // fontWeight: 'bold',
+                          fontFamily: 'Oh Whale - TTF',
+                          fontSize: 20,
+                          // marginTop: SIZES.height / 10,
+                        }}>
+                        {iqQuiz[currentQuestion].answer}
+                      </Text>
+                    </TouchableOpacity>
+                    {/* {questions[currentQuestion].answerOptions.map(
                     (answerOption, i) => (
                       <TouchableOpacity
                         key={i}
@@ -225,8 +303,9 @@ const Iq = ({navigation}) => {
                         </Text>
                       </TouchableOpacity>
                     ),
-                  )}
-                </View>
+                  )} */}
+                  </View>
+                ) : null}
               </ImageBackground>
               <View
                 style={{

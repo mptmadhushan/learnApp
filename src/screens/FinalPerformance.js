@@ -42,14 +42,14 @@ const LeaderBoard = ({navigation}) => {
             <View style={styles.leaderBack}>
               <View>
                 <Text style={styles.title2}>Previous Score</Text>
-                <Text style={styles.title4}>70%</Text>
+                <Text style={styles.title5}>Minimally effective</Text>
               </View>
               <View>
-                <Image
+                {/* <Image
                   style={{height: 100, width: 100, objectFit: 'contain'}}
                   source={require('../assets/staticnew.png')}
-                />
-                <Text style={styles.title6}>STATISTICS</Text>
+                /> */}
+                <Text style={styles.title2}>67%</Text>
               </View>
             </View>
           </View>
@@ -57,33 +57,33 @@ const LeaderBoard = ({navigation}) => {
             <View style={styles.leaderBack}>
               <View>
                 <Text style={styles.title2}>Current Score</Text>
-                <Text style={styles.title4}>80%</Text>
-                <Text style={styles.title5}>Progress: 10% ⬆️ </Text>
-                <Text style={styles.title5}>Comment: Improve</Text>
+                <Text style={styles.title4}>Skillful</Text>
+                <Text style={styles.title5}>Progress: 40% ⬆️ </Text>
               </View>
               <View>
-                <Image
+                {/* <Image
                   style={{height: 100, width: 100, objectFit: 'contain'}}
                   source={require('../assets/staticnew.png')}
-                />
-                <Text style={styles.title6}>STATISTICS</Text>
+                /> */}
+                <Text style={styles.title2}>80%</Text>
               </View>
             </View>
           </View>
           <View style={{alignItems: 'center', marginTop: 40}}>
             <View style={styles.leaderBack}>
               <View>
-                <Text style={styles.title2}>Compared Score</Text>
+                <Text style={styles.title2}>Summary</Text>
                 {/* <Text style={styles.title4}>80%</Text> */}
-                <Text style={styles.title5}>Progress: 5% 🔻 </Text>
-                <Text style={styles.title5}>
-                  Comment: Ea reprehenderit in sit in.
+                {/* <Text style={styles.title5}>Progress: 5% 🔻 </Text> */}
+                <Text style={styles.des}>
+                  You're child performance is very good.{'\n'}you are very lucky
+                  to have such a child.
                 </Text>
               </View>
               <View>
                 <Image
                   style={{height: 100, width: 100, objectFit: 'contain'}}
-                  source={require('../assets/staticnew.png')}
+                  source={require('../assets/chart.png')}
                 />
                 <Text style={styles.title6}>STATISTICS</Text>
               </View>
@@ -277,6 +277,11 @@ const styles = StyleSheet.create({
     // padding: 15,
     color: COLORS.white,
     fontWeight: 'bold',
+    textAlign: 'left',
+  },
+  des: {
+    fontSize: 10,
+    color: COLORS.white,
     textAlign: 'left',
   },
   title6: {

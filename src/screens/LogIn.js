@@ -3,7 +3,7 @@
 // https://aboutreact.com/react-native-login-and-signup/
 
 // Import React and Component
-import React, {useState, createRef} from 'react';
+import React, {useState, useEffect, createRef} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -17,16 +17,65 @@ import {
 } from 'react-native';
 
 import Loader from '../components/Loader';
+import {login} from '../api/authAPI';
+import {storeUserToken, getUserToken} from '../shared/asyncStorage';
+import {setClientToken} from '../shared/axios';
+import {useDispatch} from 'react-redux';
+import {authSuccess} from '../redux/authSlice';
 
 const LoginScreen = ({navigation}) => {
-  const STORAGE_KEY = '@save_age';
+  const dispatch = useDispatch();
+
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
 
   const passwordInputRef = createRef();
+  useEffect(() => {
+    getUserToken().then(token => {
+      if (token) {
+        setClientToken(token);
+        dispatch(authSuccess(token));
+        navigation.navigate('Home');
+      }
+    });
+  });
 
+  const onPressLogin = () => {
+    const payload = {
+      email: userEmail,
+      password: userPassword,
+    };
+
+    setLoading(true);
+
+    login(payload)
+      .then(response => {
+        if (response.error || !response.data.access) {
+          console.log('error', response.error);
+          // showToast(response.error);
+          return;
+        }
+        const {data} = response;
+        console.log('res', response.data);
+
+        console.log('token', data.access);
+        setClientToken(data.access);
+        storeUserToken(data.access).then(result =>
+          console.log('Remove me if not needed', result),
+        );
+        // navigation.navigate('Home');
+      })
+      .catch(error => {
+        console.log('error', error);
+
+        // showToast(error.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   return (
     <View style={styles.mainBody}>
       <Loader loading={loading} />
@@ -87,7 +136,7 @@ const LoginScreen = ({navigation}) => {
             <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
-              onPress={() => navigation.navigate('Home')}>
+              onPress={() => onPressLogin()}>
               <Text style={styles.buttonTextStyle}>Sign In</Text>
             </TouchableOpacity>
             <Text

@@ -13,12 +13,13 @@ import {
 } from 'react-native';
 import useSound from 'react-native-use-sound';
 
+import {getQuizAPI} from '../api/getQuizAPI';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
 const Quiz = ({navigation}) => {
   const questions = [
     {
-      questionText: 'What is the capital of France?',
+      questionText: 'What is the capital oFrance?',
       answerOptions: [
         {answerText: 'New York', isCorrect: false},
         {answerText: 'Paris', isCorrect: true},
@@ -98,6 +99,24 @@ const Quiz = ({navigation}) => {
   const handlePlay2 = () => {
     setModalVisible(!modalVisible);
   };
+  useEffect(() => {
+    getQuizAPI
+      .then(response => {
+        if (response.error) {
+          // showToast(response.error);
+          return;
+        }
+        const {data} = response;
+        // setOffers(data);
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+  }, []);
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
