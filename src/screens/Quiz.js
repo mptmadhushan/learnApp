@@ -17,47 +17,15 @@ import {getQuizAPI} from '../api/getQuizAPI';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
 const Quiz = ({navigation}) => {
-  const questions = [
-    {
-      questionText: 'What is the capital oFrance?',
-      answerOptions: [
-        {answerText: 'New York', isCorrect: false},
-        {answerText: 'Paris', isCorrect: true},
-        {answerText: 'Dublin', isCorrect: false},
-      ],
-    },
-    {
-      questionText: 'Who is CEO of Tesla?',
-      answerOptions: [
-        {answerText: 'Jeff Bezos', isCorrect: false},
-        {answerText: 'Elon Musk', isCorrect: true},
-        {answerText: 'Tony Stark', isCorrect: false},
-      ],
-    },
-    {
-      questionText: 'The iPhone was created by which company?',
-      answerOptions: [
-        {answerText: 'Apple', isCorrect: true},
-        {answerText: 'Intel', isCorrect: false},
-        {answerText: 'Microsoft', isCorrect: false},
-      ],
-    },
-    {
-      questionText: 'How many Harry Potter books are there?',
-      answerOptions: [
-        {answerText: '1', isCorrect: false},
-        {answerText: '4', isCorrect: false},
-        {answerText: '7', isCorrect: true},
-      ],
-    },
-  ];
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
   const [currQuiz, setCurrQuiz] = useState(1);
   const [modalVisible, setModalVisible] = useState(true);
+  const [Quiz, setQuiz] = useState();
 
-  const numbers = [1, 2, 3, 4];
+  const numbers = [1, 2, 3, 4, 6, 7, 8, 9, 10];
+
   const [play, pause, stop, data] = useSound(
     'https://assets.mixkit.co/sfx/preview/mixkit-tick-tock-clock-timer-1045.mp3',
   );
@@ -70,21 +38,23 @@ const Quiz = ({navigation}) => {
     navigation.navigate('QuizResults');
   };
 
-  const handleAnswerOptionClick = isCorrect => {
+  const handleAnswerOptionClick = (selectedAns, isCorrect) => {
     console.log(currQuiz);
-    if (currQuiz < 4) {
-      if (!isCorrect) {
+    console.log(selectedAns);
+    console.log(isCorrect);
+    if (currQuiz < Quiz.length) {
+      if (selectedAns !== isCorrect) {
         console.log('wrong');
-        handlePlay();
+        // handlePlay();
       }
-      if (isCorrect) {
+      if (selectedAns === isCorrect) {
         console.log('correct');
-        handlePlay();
+        // handlePlay();
         setScore(score + 1);
       }
       setCurrQuiz(currQuiz + 1);
       const nextQuestion = currentQuestion + 1;
-      if (nextQuestion < questions.length) {
+      if (nextQuestion < Quiz.length) {
         setCurrentQuestion(nextQuestion);
       } else {
         setShowScore(true);
@@ -92,7 +62,7 @@ const Quiz = ({navigation}) => {
     } else {
       pause();
       setTimeout(() => {
-        navi();
+        navi(score);
       }, 200);
     }
   };
@@ -100,15 +70,16 @@ const Quiz = ({navigation}) => {
     setModalVisible(!modalVisible);
   };
   useEffect(() => {
-    getQuizAPI
+    getQuizAPI()
       .then(response => {
         if (response.error) {
+          console.log('error', response.error);
           // showToast(response.error);
           return;
         }
         const {data} = response;
-        // setOffers(data);
-        console.log(response);
+        setQuiz(data);
+        console.log(data);
       })
       .catch(error => {
         console.log(error);
@@ -116,6 +87,7 @@ const Quiz = ({navigation}) => {
       .finally(() => {
         // setLoading(false);
       });
+    // handlePlay();
   }, []);
   function renderQuiz() {
     return (
@@ -192,31 +164,88 @@ const Quiz = ({navigation}) => {
                 padding: 10,
                 marginTop: SIZES.height / 15,
               }}>
-              <Text
-                style={{
-                  color: COLORS.white,
-                  // fontWeight: 'bold',
-                  fontSize: 20,
-                  fontFamily: 'Oh Whale - TTF',
-                }}>
-                {questions[currentQuestion].questionText}
-              </Text>
+              {Quiz ? (
+                <Text
+                  style={{
+                    color: COLORS.white,
+                    // fontWeight: 'bold',
+                    fontSize: 20,
+                    fontFamily: 'Oh Whale - TTF',
+                  }}>
+                  {Quiz[currentQuestion].question}
+                </Text>
+              ) : null}
             </View>
             <View style={styles.firstCard}>
               <ImageBackground
                 style={{height: '100%', width: '100%'}}
                 source={require('../assets/qizFrame.png')}>
-                <View
-                  style={{
-                    textAlign: 'center',
-                    width: '100%',
-                    height: '100%',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    justifyContent: 'space-around',
-                    // padding: 10,
-                  }}>
-                  {questions[currentQuestion].answerOptions.map(
+                {Quiz ? (
+                  <View
+                    style={{
+                      textAlign: 'center',
+                      width: '100%',
+                      height: '100%',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      justifyContent: 'space-around',
+                      // padding: 10,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleAnswerOptionClick(
+                          Quiz[currentQuestion].dummy_answer1,
+                          Quiz[currentQuestion].answer,
+                        )
+                      }>
+                      <Text
+                        style={{
+                          color: COLORS.secondary,
+                          // fontWeight: 'bold',
+                          fontFamily: 'Oh Whale - TTF',
+                          fontSize: 20,
+                          // marginTop: SIZES.height / 10,
+                        }}>
+                        {Quiz[currentQuestion].dummy_answer1}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleAnswerOptionClick(
+                          Quiz[currentQuestion].dummy_answer2,
+                          Quiz[currentQuestion].answer,
+                        )
+                      }>
+                      <Text
+                        style={{
+                          color: COLORS.secondary,
+                          // fontWeight: 'bold',
+                          fontFamily: 'Oh Whale - TTF',
+                          fontSize: 20,
+                          // marginTop: SIZES.height / 10,
+                        }}>
+                        {Quiz[currentQuestion].dummy_answer2}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleAnswerOptionClick(
+                          Quiz[currentQuestion].answer,
+                          Quiz[currentQuestion].answer,
+                        )
+                      }>
+                      <Text
+                        style={{
+                          color: COLORS.secondary,
+                          // fontWeight: 'bold',
+                          fontFamily: 'Oh Whale - TTF',
+                          fontSize: 20,
+                          // marginTop: SIZES.height / 10,
+                        }}>
+                        {Quiz[currentQuestion].answer}
+                      </Text>
+                    </TouchableOpacity>
+                    {/* {questions[currentQuestion].answerOptions.map(
                     (answerOption, i) => (
                       <TouchableOpacity
                         key={i}
@@ -227,17 +256,17 @@ const Quiz = ({navigation}) => {
                           style={{
                             color: COLORS.secondary,
                             // fontWeight: 'bold',
-                            fontSize: 20,
                             fontFamily: 'Oh Whale - TTF',
-
+                            fontSize: 20,
                             // marginTop: SIZES.height / 10,
                           }}>
                           {answerOption.answerText}
                         </Text>
                       </TouchableOpacity>
                     ),
-                  )}
-                </View>
+                  )} */}
+                  </View>
+                ) : null}
               </ImageBackground>
               {/* <View
                 style={{

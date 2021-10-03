@@ -13,10 +13,11 @@ import {
 } from 'react-native';
 import Tts from 'react-native-tts';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import axios from 'axios';
 
 const Iq = ({navigation}) => {
   const handlePlay = () => {
-    Tts.speak('Dog', {
+    Tts.speak(currWord, {
       androidParams: {
         KEY_PARAM_PAN: -1,
         KEY_PARAM_VOLUME: 0.5,
@@ -25,9 +26,47 @@ const Iq = ({navigation}) => {
     });
   };
   const n = 8;
+  const words = [
+    'animal',
+    'baloon',
+    'birthday',
+    'clean',
+    'father',
+    'food',
+    'green',
+    'house',
+    'leader',
+    'letter',
+    'picture',
+    'school',
+    'seven',
+    'ship',
+    'sleep',
+    'train',
+    'yellow',
+  ];
+  // var currWord = words[Math.floor(Math.random() * words.length)];
   const [modalVisible, setModalVisible] = useState(true);
+  const [image, setImage] = useState('');
+  const [currWord, setCurWord] = useState(
+    words[Math.floor(Math.random() * words.length)],
+  );
+  const [clientID, setClientID] = useState(
+    'bJQNgLuTGTSRJMsTOETfYTstQMWrqLWqGn6pQvSYEkA',
+  );
   useEffect(() => {
-    // Tts.speak('Dog', {
+    // setCurWord(words[Math.floor(Math.random() * words.length)]);
+    const url =
+      'https://api.unsplash.com/search/photos?page=1&query=' +
+      currWord +
+      '&client_id=' +
+      clientID;
+
+    axios.get(url).then(response => {
+      console.log(response.data.results[0].urls.small);
+      setImage(response.data.results[0].urls.small);
+    });
+    // Tts.speak(currWord, {
     //   androidParams: {
     //     KEY_PARAM_PAN: -1,
     //     KEY_PARAM_VOLUME: 1,
@@ -39,12 +78,23 @@ const Iq = ({navigation}) => {
   }, []);
   const handlePlayOnClose = () => {
     setModalVisible(!modalVisible);
-    Tts.speak('Dog', {
+    Tts.speak(currWord, {
       androidParams: {
         KEY_PARAM_PAN: -1,
         KEY_PARAM_VOLUME: 0.5,
         KEY_PARAM_STREAM: 'STREAM_MUSIC',
       },
+    });
+  };
+  const getImage = () => {
+    const url =
+      'https://api.unsplash.com/search/photos?page=1&query=' +
+      currWord +
+      '&client_id=' +
+      clientID;
+
+    axios.get(url).then(response => {
+      console.log(response);
     });
   };
   function renderQuiz() {
@@ -109,17 +159,21 @@ const Iq = ({navigation}) => {
                     justifyContent: 'center',
                     marginTop: SIZES.height / 4,
                   }}>
-                  <Image
-                    style={{width: 100, height: 100, resizeMode: 'contain'}}
-                    source={require('../assets/dog.png')}
-                  />
+                  {image ? (
+                    <Image
+                      style={{width: 100, height: 100, resizeMode: 'contain'}}
+                      source={{
+                        uri: image,
+                      }}
+                    />
+                  ) : null}
                   <Text
                     style={{
                       color: COLORS.secondary,
                       fontSize: 50,
                       fontFamily: 'Schoolbell',
                     }}>
-                    DOG
+                    {currWord}
                   </Text>
                 </View>
               </ImageBackground>

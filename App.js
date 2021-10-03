@@ -37,7 +37,7 @@ const App = () => {
         <Stack.Navigator
           screenOptions={{headerShown: false}}
           // initialRouteName={'QuizIndex'}>
-          initialRouteName={'Login'}>
+          initialRouteName={'Speech'}>
           <Stack.Screen name="Home2" component={Tabs} />
           <Stack.Screen name="QuizNew" component={QuizNew} />
           <Stack.Screen name="QuizIndex" component={QuizIndex} />
