@@ -12,13 +12,54 @@ import {
   ImageBackground,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
+import {sketchApi} from '../api/sketchApi';
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
 const DrawingUpload = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(true);
   let camera;
+  const takePicture = async () => {
+    if (camera) {
+      const options = {quality: 0.5, base64: true};
+      const data = await camera.takePictureAsync(options);
+      console.log(data.uri);
+      uploadSketch(data.uri);
+    }
+  };
+  const uploadSketch = async fileUrl => {
+    console.log('upload');
+    console.log('🧑‍🚀🧑‍🚀', fileUrl);
+    let formData = new FormData();
+    formData.append('image', {
+      uri: fileUrl,
+      type: 'image/jpeg',
+      name: 'sketch.jpg',
+    });
+    formData.append('sketch_id', 6);
+    console.log(formData);
 
+    sketchApi(formData)
+      .then(response => {
+        if (response.error) {
+          console.log('error', response.error);
+          // showToast(response.error);
+          return;
+        }
+
+        const {data} = response;
+        console.log('res', data);
+        navigation.navigate('DrawingResults');
+      })
+      .catch(error => {
+        console.log('error', error);
+
+        // showToast(error.response.data.message);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+  };
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
@@ -97,7 +138,8 @@ const DrawingUpload = ({navigation}) => {
               <TouchableOpacity
                 style={styles.buttonStyle2}
                 activeOpacity={0.5}
-                onPress={() => navigation.navigate('DrawingResults')}>
+                onPress={() => takePicture()}>
+                {/* onPress={() => navigation.navigate('DrawingResults')}> */}
                 <Text style={styles.buttonTextStyle}>Capture</Text>
               </TouchableOpacity>
             </View>

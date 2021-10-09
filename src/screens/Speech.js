@@ -14,7 +14,8 @@ import {
 import Tts from 'react-native-tts';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 import axios from 'axios';
-
+import {audioComparison} from '../api/audioApi';
+import AudioRecord from 'react-native-audio-record';
 const Iq = ({navigation}) => {
   const handlePlay = () => {
     Tts.speak(currWord, {
@@ -25,7 +26,6 @@ const Iq = ({navigation}) => {
       },
     });
   };
-  const n = 8;
   const words = [
     'animal',
     'baloon',
@@ -48,6 +48,7 @@ const Iq = ({navigation}) => {
   // var currWord = words[Math.floor(Math.random() * words.length)];
   const [modalVisible, setModalVisible] = useState(true);
   const [image, setImage] = useState('');
+  const [score, setScore] = useState('');
   const [currWord, setCurWord] = useState(
     words[Math.floor(Math.random() * words.length)],
   );
@@ -66,16 +67,100 @@ const Iq = ({navigation}) => {
       console.log(response.data.results[0].urls.small);
       setImage(response.data.results[0].urls.small);
     });
-    // Tts.speak(currWord, {
-    //   androidParams: {
-    //     KEY_PARAM_PAN: -1,
-    //     KEY_PARAM_VOLUME: 1,
-    //     KEY_PARAM_STREAM: 'STREAM_MUSIC',
-    //   },
-    // });
-    // Update the document title using the browser API
-    // document.title = `You clicked ${count} times`;
+    const options = {
+      sampleRate: 16000, // default 44100
+      channels: 1, // 1 or 2, default 1
+      bitsPerSample: 16, // 8 or 16, default 16
+      audioSource: 6, // android only (see below)
+      wavFile: 'test.wav', // default 'audio.wav'
+    };
+
+    AudioRecord.init(options);
+
+    console.log('use effect home');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const record = () => {
+    console.log('record');
+
+    AudioRecord.start();
+    timeout;
+    let timeout = setTimeout(() => {
+      stopRecord();
+      console.log('hello');
+    }, 5000);
+  };
+
+  const stopRecord = async () => {
+    console.log('recordStop ');
+    const audioFile = await AudioRecord.stop();
+    AudioRecord.on('data', data => {});
+    console.log('audioFile 🍷', audioFile);
+    initialRec(audioFile);
+    // AudioRecord.stop();
+  };
+  const initialRec = audioFile => {
+    uploadAudio(audioFile);
+    console.log('initialRec', audioFile);
+    const options = {
+      sampleRate: 16000, // default 44100
+      channels: 1, // 1 or 2, default 1
+      bitsPerSample: 16, // 8 or 16, default 16
+      audioSource: 6, // android only (see below)
+      wavFile: 'test.wav', // default 'audio.wav'
+    };
+  };
+  const uploadAudio = async fileUrl => {
+    console.log('upload');
+    console.log('🧑‍🚀🧑‍🚀', fileUrl);
+    let formData = new FormData();
+    formData.append('audio', {
+      uri: 'file:///data/user/0/com.learnapp/files/test.wav',
+      type: 'audio/wav',
+      name: 'test.wav',
+    });
+    formData.append('word', currWord);
+    console.log(formData);
+
+    audioComparison(formData)
+      .then(response => {
+        if (response.error) {
+          console.log('error', response.error);
+          // showToast(response.error);
+          return;
+        }
+
+        const {data} = response;
+        console.log('res', data);
+        setScore(data);
+      })
+      .catch(error => {
+        console.log('error', error);
+
+        // showToast(error.response.data.message);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+    // fetch(`{BASE_URL}/language`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    //   body: formData,
+    // })
+    //   .then(response => response.json())
+    //   .then(response => {
+    //     console.log('response 🔥', response.flag);
+    //     console.log(response);
+    //     if (response.flag != 'navigation-error') {
+    //       navigation.navigate(response.flag);
+    //     } else {
+    //       console.log('route error');
+    //     }
+    //   })
+    //   .catch(err => console.error(err));
+  };
   const handlePlayOnClose = () => {
     setModalVisible(!modalVisible);
     Tts.speak(currWord, {
@@ -181,14 +266,21 @@ const Iq = ({navigation}) => {
                 style={{
                   textAlign: 'center',
                   display: 'flex',
+                  flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'center',
+                  justifyContent: 'space-around',
                 }}>
                 <TouchableOpacity
                   style={styles.buttonStyle}
                   activeOpacity={0.5}
                   onPress={() => handlePlay()}>
                   <Text style={styles.buttonTextStyle}>Re-play</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  activeOpacity={0.5}
+                  onPress={() => record()}>
+                  <Text style={styles.buttonTextStyle}>Start</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.buttonStyle}
@@ -226,7 +318,7 @@ const styles = StyleSheet.create({
     marginLeft: 35,
     marginRight: 35,
     // marginTop: 20,
-    marginBottom: 25,
+    marginBottom: 2,
   },
   number: {
     height: SIZES.height / 20,

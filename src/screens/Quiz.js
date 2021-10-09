@@ -38,10 +38,13 @@ const Quiz = ({navigation}) => {
     navigation.navigate('QuizResults');
   };
 
-  const handleAnswerOptionClick = (selectedAns, isCorrect) => {
-    console.log(currQuiz);
-    console.log(selectedAns);
-    console.log(isCorrect);
+  const handleAnswerOptionClick = (selectedAns, isCorrect, id) => {
+    console.log('==> ans', selectedAns, 'id-->', id);
+    const ansToSend = {
+      question: id,
+      given_answer: selectedAns,
+      time_taken: 1,
+    };
     if (currQuiz < Quiz.length) {
       if (selectedAns !== isCorrect) {
         console.log('wrong');
@@ -196,6 +199,7 @@ const Quiz = ({navigation}) => {
                         handleAnswerOptionClick(
                           Quiz[currentQuestion].dummy_answer1,
                           Quiz[currentQuestion].answer,
+                          Quiz[currentQuestion].id,
                         )
                       }>
                       <Text
@@ -214,6 +218,7 @@ const Quiz = ({navigation}) => {
                         handleAnswerOptionClick(
                           Quiz[currentQuestion].dummy_answer2,
                           Quiz[currentQuestion].answer,
+                          Quiz[currentQuestion].id,
                         )
                       }>
                       <Text
@@ -232,6 +237,7 @@ const Quiz = ({navigation}) => {
                         handleAnswerOptionClick(
                           Quiz[currentQuestion].answer,
                           Quiz[currentQuestion].answer,
+                          Quiz[currentQuestion].id,
                         )
                       }>
                       <Text

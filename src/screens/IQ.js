@@ -15,6 +15,7 @@ import {
 import useSound from 'react-native-use-sound';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 import {getQuizAPI} from '../api/getQuizAPI';
+import {getResultAPI} from '../api/getResultAPI';
 
 const Iq = ({navigation}) => {
   useEffect(() => {
@@ -27,7 +28,6 @@ const Iq = ({navigation}) => {
         }
         const {data} = response;
         setIq(data);
-        console.log(data);
       })
       .catch(error => {
         console.log(error);
@@ -77,32 +77,61 @@ const Iq = ({navigation}) => {
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
   const [iqQuiz, setIq] = useState();
+  const [time, setTime] = useState();
   const [modalVisible, setModalVisible] = useState(true);
   const [currQuiz, setCurrQuiz] = useState(1);
-
+  const [theArray, setTheArray] = useState([]);
   const numbers = [1, 2, 3, 4, 6, 7, 8, 9, 10];
 
   const [play, pause, stop, data] = useSound(
     'https://assets.mixkit.co/sfx/preview/mixkit-tick-tock-clock-timer-1045.mp3',
   );
-  const handlePlay = () => {
-    console.log('play');
-    play();
-  };
+
   const handlePlay2 = () => {
     setModalVisible(!modalVisible);
     console.log('play');
+    setTime(Date.now());
     play();
   };
-  const navi = () => {
-    console.log('navi', score);
-    navigation.navigate('IQResults');
+  const navigateTores = newArr => {
+    if (newArr.length === 10) {
+      console.log('arr length', newArr);
+      getResultAPI(newArr)
+        .then(response => {
+          if (response.error) {
+            console.log('error', response.error);
+            // showToast(response.error);
+            return;
+          }
+          const {data} = response;
+          console.log('res', response.data);
+
+          // navigation.navigate('Home');
+        })
+        .catch(error => {
+          console.log('error', error);
+        })
+        .finally(() => {
+          console.log('response');
+        });
+      // navigation.navigate('IQResults');
+    }
   };
 
-  const handleAnswerOptionClick = (selectedAns, isCorrect) => {
-    console.log(currQuiz);
-    console.log(selectedAns);
-    console.log(isCorrect);
+  const handleAnswerOptionClick = (selectedAns, isCorrect, id) => {
+    // console.log('==> ans', selectedAns, 'id-->', id);
+
+    var end = Date.now();
+    const milles = end - time;
+    var seconds = ((milles % 60000) / 1000).toFixed(0);
+    const ansToSend = {
+      question: id,
+      given_answer: selectedAns,
+      time_taken: seconds,
+    };
+    // setTheArray(prevArray => [...prevArray, ansToSend]);
+    setTheArray(theArray => [...theArray, ansToSend]);
+    // console.log(theArray);
     if (currQuiz < iqQuiz.length) {
       if (selectedAns !== isCorrect) {
         console.log('wrong');
@@ -116,14 +145,17 @@ const Iq = ({navigation}) => {
       setCurrQuiz(currQuiz + 1);
       const nextQuestion = currentQuestion + 1;
       if (nextQuestion < iqQuiz.length) {
+        setTime(Date.now());
         setCurrentQuestion(nextQuestion);
       } else {
         setShowScore(true);
       }
     } else {
       pause();
+      const newArr = theArray;
       setTimeout(() => {
-        navi(score);
+        navigateTores(newArr);
+        // score
       }, 200);
     }
   };
@@ -235,6 +267,7 @@ const Iq = ({navigation}) => {
                         handleAnswerOptionClick(
                           iqQuiz[currentQuestion].dummy_answer1,
                           iqQuiz[currentQuestion].answer,
+                          iqQuiz[currentQuestion].id,
                         )
                       }>
                       <Text
@@ -253,6 +286,7 @@ const Iq = ({navigation}) => {
                         handleAnswerOptionClick(
                           iqQuiz[currentQuestion].dummy_answer2,
                           iqQuiz[currentQuestion].answer,
+                          iqQuiz[currentQuestion].id,
                         )
                       }>
                       <Text
@@ -271,6 +305,7 @@ const Iq = ({navigation}) => {
                         handleAnswerOptionClick(
                           iqQuiz[currentQuestion].answer,
                           iqQuiz[currentQuestion].answer,
+                          iqQuiz[currentQuestion].id,
                         )
                       }>
                       <Text
