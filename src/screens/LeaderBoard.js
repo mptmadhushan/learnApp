@@ -79,7 +79,7 @@ const LeaderBoard = ({navigation}) => {
                     </Text>
                   </View>
                   <Text>{resp.grade}</Text>
-                  <Text>Score : {resp.score}+</Text>
+                  <Text>Score : {resp.score.toFixed(2)}+</Text>
                 </View>
               ) : null}
               {/* );
@@ -88,7 +88,9 @@ const LeaderBoard = ({navigation}) => {
             {resp ? (
               <View>
                 <Text style={styles.title2}>Overall Performance</Text>
-                <Text style={styles.title4}>SCORE: {resp.score}</Text>
+                <Text style={styles.title4}>
+                  SCORE: {resp.score.toFixed(2)}
+                </Text>
                 <Text style={styles.title4}>Progress: {resp.progress}</Text>
                 <Text style={styles.title3}>
                   {resp.grade} : {resp.detail}
