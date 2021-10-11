@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -14,6 +14,7 @@ import CheckBox from '@react-native-community/checkbox';
 // import {CheckBox} from 'react-native-elements';
 // import {Avatar} from 'react-native-elements';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {getOverallResultAPI} from '../api/getOverallResultAPI';
 
 const LeaderBoard = ({navigation}) => {
   const users = [
@@ -28,6 +29,28 @@ const LeaderBoard = ({navigation}) => {
       avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
     },
   ];
+  const [resp, setResp] = useState();
+
+  useEffect(() => {
+    getOverallResultAPI()
+      .then(response => {
+        if (response.error) {
+          console.log('error', response.error);
+          // showToast(response.error);
+          return;
+        }
+        const {data} = response;
+        console.log(data);
+        setResp(data);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+    // handlePlay();
+  }, []);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   function renderQuiz() {
     return (
@@ -42,45 +65,43 @@ const LeaderBoard = ({navigation}) => {
               <Text style={styles.title}>Leaderboard</Text>
             </View>
             <View style={{alignItems: 'center', marginTop: 40}}>
-              {users.map((u, i) => {
-                return (
-                  <View style={styles.leaderBack} key={i}>
-                    <View style={styles.number}>
-                      <Text
-                        style={{
-                          color: COLORS.white,
-                          fontFamily: 'Oh Whale - TTF',
-                        }}>
-                        {i}
-                      </Text>
-                    </View>
-                    <Text>{u.name}</Text>
-                    <Text>Ratings : {u.rating}+</Text>
+              {/* {users.map((u, i) => {
+                return ( */}
+              {resp ? (
+                <View style={styles.leaderBack}>
+                  <View style={styles.number}>
+                    <Text
+                      style={{
+                        color: COLORS.white,
+                        fontFamily: 'Oh Whale - TTF',
+                      }}>
+                      i
+                    </Text>
                   </View>
-                  // <View key={i} style={styles.user}>
-                  //   <Image
-                  //     style={styles.image}
-                  //     resizeMode="cover"
-                  //     source={{uri: u.avatar}}
-                  //   />
-                  //   <Text style={styles.name}>{u.name}</Text>
-                  // </View>
-                );
-              })}
+                  <Text>{resp.grade}</Text>
+                  <Text>Score : {resp.score}+</Text>
+                </View>
+              ) : null}
+              {/* );
+              })} */}
             </View>
-            <Text style={styles.title2}>Overall Performance</Text>
-            <Text style={styles.title4}>SCORE: 1231</Text>
-            <Text style={styles.title4}>Rating: A+</Text>
-            <Text style={styles.title3}>
-              Developing : Your child have average performance.Parents can
-              encourage to child for performance even better
-            </Text>
+            {resp ? (
+              <View>
+                <Text style={styles.title2}>Overall Performance</Text>
+                <Text style={styles.title4}>SCORE: {resp.score}</Text>
+                <Text style={styles.title4}>Progress: {resp.progress}</Text>
+                <Text style={styles.title3}>
+                  {resp.grade} : {resp.detail}
+                </Text>
+              </View>
+            ) : null}
             <View
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 flexDirection: 'row',
                 justifyContent: 'center',
+                marginTop: 40,
               }}>
               <CheckBox
                 disabled={false}

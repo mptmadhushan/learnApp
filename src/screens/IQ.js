@@ -38,41 +38,6 @@ const Iq = ({navigation}) => {
     // handlePlay();
   }, []);
 
-  // const questions = [
-  //   {
-  //     questionText: 'What is the capital of France?',
-  //     answerOptions: [
-  //       {answerText: 'New York', isCorrect: false},
-  //       {answerText: 'Paris', isCorrect: true},
-  //       {answerText: 'Dublin', isCorrect: false},
-  //     ],
-  //   },
-  //   {
-  //     questionText: 'Who is CEO of Tesla?',
-  //     answerOptions: [
-  //       {answerText: 'Jeff Bezos', isCorrect: false},
-  //       {answerText: 'Elon Musk', isCorrect: true},
-  //       {answerText: 'Tony Stark', isCorrect: false},
-  //     ],
-  //   },
-  //   {
-  //     questionText: 'The iPhone was created by which company?',
-  //     answerOptions: [
-  //       {answerText: 'Apple', isCorrect: true},
-  //       {answerText: 'Intel', isCorrect: false},
-  //       {answerText: 'Microsoft', isCorrect: false},
-  //     ],
-  //   },
-  //   {
-  //     questionText: 'How many Harry Potter books are there?',
-  //     answerOptions: [
-  //       {answerText: '1', isCorrect: false},
-  //       {answerText: '4', isCorrect: false},
-  //       {answerText: '7', isCorrect: true},
-  //     ],
-  //   },
-  // ];
-
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
@@ -83,7 +48,7 @@ const Iq = ({navigation}) => {
   const [theArray, setTheArray] = useState([]);
   const numbers = [1, 2, 3, 4, 6, 7, 8, 9, 10];
 
-  const [play, pause, stop, data] = useSound(
+  const [play, pause, stop] = useSound(
     'https://assets.mixkit.co/sfx/preview/mixkit-tick-tock-clock-timer-1045.mp3',
   );
 
@@ -103,10 +68,10 @@ const Iq = ({navigation}) => {
             // showToast(response.error);
             return;
           }
-          const {data} = response;
-          console.log('res', response.data);
+          const resData = response.data;
+          console.log('res', resData);
 
-          // navigation.navigate('Home');
+          navigation.navigate('IQResults', {resData});
         })
         .catch(error => {
           console.log('error', error);
@@ -119,8 +84,6 @@ const Iq = ({navigation}) => {
   };
 
   const handleAnswerOptionClick = (selectedAns, isCorrect, id) => {
-    // console.log('==> ans', selectedAns, 'id-->', id);
-
     var end = Date.now();
     const milles = end - time;
     var seconds = ((milles % 60000) / 1000).toFixed(0);
@@ -129,7 +92,6 @@ const Iq = ({navigation}) => {
       given_answer: selectedAns,
       time_taken: seconds,
     };
-    // setTheArray(prevArray => [...prevArray, ansToSend]);
     setTheArray(theArray => [...theArray, ansToSend]);
     // console.log(theArray);
     if (currQuiz < iqQuiz.length) {

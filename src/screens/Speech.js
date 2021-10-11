@@ -142,24 +142,6 @@ const Iq = ({navigation}) => {
       .finally(() => {
         // setLoading(false);
       });
-    // fetch(`{BASE_URL}/language`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    //   body: formData,
-    // })
-    //   .then(response => response.json())
-    //   .then(response => {
-    //     console.log('response 🔥', response.flag);
-    //     console.log(response);
-    //     if (response.flag != 'navigation-error') {
-    //       navigation.navigate(response.flag);
-    //     } else {
-    //       console.log('route error');
-    //     }
-    //   })
-    //   .catch(err => console.error(err));
   };
   const handlePlayOnClose = () => {
     setModalVisible(!modalVisible);
@@ -285,7 +267,7 @@ const Iq = ({navigation}) => {
                 <TouchableOpacity
                   style={styles.buttonStyle}
                   activeOpacity={0.5}
-                  onPress={() => navigation.navigate('SpeechResult')}>
+                  onPress={() => navigation.navigate('SpeechResult', {score})}>
                   <Text style={styles.buttonTextStyle}>Continue</Text>
                 </TouchableOpacity>
               </View>

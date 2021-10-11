@@ -47,9 +47,9 @@ const DrawingUpload = ({navigation}) => {
           return;
         }
 
-        const {data} = response;
-        console.log('res', data);
-        navigation.navigate('DrawingResults');
+        const resData = response.data;
+        console.log('res', resData);
+        navigation.navigate('DrawingResults', {resData});
       })
       .catch(error => {
         console.log('error', error);

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -13,22 +13,43 @@ import {
 // import {Avatar} from 'react-native-elements';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 import CheckBox from '@react-native-community/checkbox';
+import {getFinalResultAPI} from '../api/getFinalResultAPI';
 
 const LeaderBoard = ({navigation}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
   const users = [
     {
-      name: 'STAGE 1',
-      rating: '999+',
-      avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
-    },
-    {
-      name: 'STAGE 2',
-      rating: '949+',
-      avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
+      new_drawing_score: 0.2,
+      new_quiz_scores: 0.33333333333333337,
+      new_speaking_score: 0.9,
+      previous_drawing_score: 0,
+      // resp.previous_quiz_scores: 0.2,
+      previous_speaking_score: 0,
     },
   ];
+  const [resp, setResp] = useState();
+
+  useEffect(() => {
+    getFinalResultAPI()
+      .then(response => {
+        if (response.error) {
+          console.log('error', response.error);
+          // showToast(response.error);
+          return;
+        }
+        const {data} = response;
+        console.log(data);
+        setResp(data);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+    // handlePlay();
+  }, []);
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
@@ -40,10 +61,20 @@ const LeaderBoard = ({navigation}) => {
           source={require('../assets/6ob.gif')}>
           <View style={{alignItems: 'center', marginTop: 40}}>
             <View style={styles.leaderBack}>
-              <View>
-                <Text style={styles.title2}>Previous Score</Text>
-                <Text style={styles.title5}>Minimally effective</Text>
-              </View>
+              {resp ? (
+                <View>
+                  <Text style={styles.title2}>Previous Score</Text>
+                  <Text style={styles.title5}>
+                    IQ {resp.previous_quiz_scores.toFixed(2)}
+                  </Text>
+                  <Text style={styles.title5}>
+                    Speech {resp.previous_speaking_score}
+                  </Text>
+                  <Text style={styles.title5}>
+                    Drawing {resp.previous_drawing_score}
+                  </Text>
+                </View>
+              ) : null}
               <View>
                 {/* <Image
                   style={{height: 100, width: 100, objectFit: 'contain'}}
@@ -55,11 +86,21 @@ const LeaderBoard = ({navigation}) => {
           </View>
           <View style={{alignItems: 'center', marginTop: 40}}>
             <View style={styles.leaderBack}>
-              <View>
-                <Text style={styles.title2}>Current Score</Text>
-                <Text style={styles.title4}>Skillful</Text>
-                <Text style={styles.title5}>Progress: 40% ⬆️ </Text>
-              </View>
+              {resp ? (
+                <View>
+                  <Text style={styles.title2}>Current Score</Text>
+                  {/* <Text style={styles.title4}>Skillful</Text> */}
+                  <Text style={styles.title5}>
+                    IQ {resp.new_quiz_scores.toFixed(2)}
+                  </Text>
+                  <Text style={styles.title5}>
+                    Speech {resp.new_speaking_score}
+                  </Text>
+                  <Text style={styles.title5}>
+                    Drawing {resp.new_drawing_score}
+                  </Text>
+                </View>
+              ) : null}
               <View>
                 {/* <Image
                   style={{height: 100, width: 100, objectFit: 'contain'}}
@@ -82,7 +123,7 @@ const LeaderBoard = ({navigation}) => {
               </View>
               <View>
                 <Image
-                  style={{height: 100, width: 100, objectFit: 'contain'}}
+                  style={{height: 100, width: 100}}
                   source={require('../assets/chart.png')}
                 />
                 <Text style={styles.title6}>STATISTICS</Text>

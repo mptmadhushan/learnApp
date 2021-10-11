@@ -13,7 +13,8 @@ import {
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
-const QuizResults = ({navigation}) => {
+const QuizResults = ({navigation, route}) => {
+  const {score} = route.params;
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
@@ -36,6 +37,7 @@ const QuizResults = ({navigation}) => {
                   />
                   <View style={{alignItems: 'center'}}>
                     <Text style={styles.title}>Congratulations.!{'\n'}</Text>
+
                     <ImageBackground
                       style={{
                         display: 'flex',
@@ -44,10 +46,15 @@ const QuizResults = ({navigation}) => {
                         justifyContent: 'center',
                       }}
                       source={require('../assets/speechResu.png')}>
-                      <Text style={styles.title3}>
+                      {/* <Text style={styles.title3}>
                         Comparing System expectation, you are in LOW
                         pronunciation level, Practice more
-                      </Text>
+                      </Text> */}
+                      {score ? (
+                        <Text style={styles.title4}>
+                          You got {score.score} marks
+                        </Text>
+                      ) : null}
                     </ImageBackground>
                     <TouchableOpacity
                       style={styles.buttonStyle}
@@ -217,6 +224,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Oh Whale - TTF',
     fontSize: 16,
     padding: 52,
+    color: COLORS.white,
+    textAlign: 'center',
+  },
+  title4: {
+    fontFamily: 'Oh Whale - TTF',
+    fontSize: 16,
     color: COLORS.white,
     textAlign: 'center',
   },

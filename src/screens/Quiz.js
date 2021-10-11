@@ -15,6 +15,7 @@ import useSound from 'react-native-use-sound';
 
 import {getQuizAPI} from '../api/getQuizAPI';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {getResultAPI} from '../api/getResultAPI';
 
 const Quiz = ({navigation}) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -23,6 +24,8 @@ const Quiz = ({navigation}) => {
   const [currQuiz, setCurrQuiz] = useState(1);
   const [modalVisible, setModalVisible] = useState(true);
   const [Quiz, setQuiz] = useState();
+  const [theArray, setTheArray] = useState([]);
+  const [time, setTime] = useState();
 
   const numbers = [1, 2, 3, 4, 6, 7, 8, 9, 10];
 
@@ -37,14 +40,42 @@ const Quiz = ({navigation}) => {
     console.log('navi');
     navigation.navigate('QuizResults');
   };
+  const navigateTores = newArr => {
+    if (newArr.length === 10) {
+      console.log('arr length', newArr);
+      getResultAPI(newArr)
+        .then(response => {
+          if (response.error) {
+            console.log('error', response.error);
+            // showToast(response.error);
+            return;
+          }
+          const resData = response.data;
+          console.log('res', resData);
+
+          navigation.navigate('QuizResults', {resData});
+        })
+        .catch(error => {
+          console.log('error', error);
+        })
+        .finally(() => {
+          console.log('response');
+        });
+      // navigation.navigate('IQResults');
+    }
+  };
 
   const handleAnswerOptionClick = (selectedAns, isCorrect, id) => {
-    console.log('==> ans', selectedAns, 'id-->', id);
+    var end = Date.now();
+    const milles = end - time;
+    var seconds = ((milles % 60000) / 1000).toFixed(0);
     const ansToSend = {
       question: id,
       given_answer: selectedAns,
-      time_taken: 1,
+      time_taken: seconds,
     };
+    setTheArray(theArray => [...theArray, ansToSend]);
+
     if (currQuiz < Quiz.length) {
       if (selectedAns !== isCorrect) {
         console.log('wrong');
@@ -64,13 +95,16 @@ const Quiz = ({navigation}) => {
       }
     } else {
       pause();
+      const newArr = theArray;
       setTimeout(() => {
-        navi(score);
+        navigateTores(newArr);
+        // score
       }, 200);
     }
   };
   const handlePlay2 = () => {
     setModalVisible(!modalVisible);
+    setTime(Date.now());
   };
   useEffect(() => {
     getQuizAPI()

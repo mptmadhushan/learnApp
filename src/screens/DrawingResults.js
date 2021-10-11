@@ -13,7 +13,8 @@ import {
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
-const DrawingResults = ({navigation}) => {
+const DrawingResults = ({navigation, route}) => {
+  const {resData} = route.params;
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
@@ -31,22 +32,22 @@ const DrawingResults = ({navigation}) => {
                   style={{height: '100%', width: '50%'}}
                   source={require('../assets/drawRes.png')}
                 />
-                <View
-                  style={{
-                    backgroundColor: COLORS.secondary,
-                    borderRadius: 30,
-                    padding: 10,
-                  }}>
-                  <Text style={styles.title}>Drawing Results.!</Text>
-                  <Text style={styles.title3}>ACCURACY: 9.6</Text>
-                  <Text style={styles.title3}>
-                    "Skill full" - your's child drawing skills are amazing,
-                    rather than other children of this age.
-                  </Text>
-                  <Text style={styles.title3}>
-                    IMPROVEMENTS: Qui ea amet laboris mollit mollit occaecat.
-                  </Text>
-                </View>
+                {resData ? (
+                  <View
+                    style={{
+                      backgroundColor: COLORS.secondary,
+                      borderRadius: 30,
+                      padding: 10,
+                    }}>
+                    <Text style={styles.title}>Drawing Results.!</Text>
+                    <Text style={styles.title3}>ACCURACY:{resData.score}</Text>
+                    <Text style={styles.title3}>{resData.detail}</Text>
+                    <Text style={styles.title3}>
+                      "Skill full" - your's child drawing skills are amazing,
+                      rather than other children of this age.
+                    </Text>
+                  </View>
+                ) : null}
                 <TouchableOpacity
                   style={styles.buttonStyle}
                   activeOpacity={0.5}

@@ -22,6 +22,7 @@ import {storeUserToken, getUserToken} from '../shared/asyncStorage';
 import {setClientToken} from '../shared/axios';
 import {useDispatch} from 'react-redux';
 import {authSuccess} from '../redux/authSlice';
+import Toast from 'react-native-simple-toast';
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -30,7 +31,9 @@ const LoginScreen = ({navigation}) => {
   const [userPassword, setUserPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
-
+  const showToast = message => {
+    Toast.showWithGravity(message, Toast.SHORT, Toast.TOP);
+  };
   const passwordInputRef = createRef();
   useEffect(() => {
     getUserToken().then(token => {
@@ -52,9 +55,9 @@ const LoginScreen = ({navigation}) => {
 
     login(payload)
       .then(response => {
-        if (response.error || !response.data.access) {
-          console.log('error', response.error);
-          // showToast(response.error);
+        if (response.error) {
+          console.log('error__<', response.error);
+          showToast('try again');
           return;
         }
         const {data} = response;
@@ -68,9 +71,9 @@ const LoginScreen = ({navigation}) => {
         // navigation.navigate('Home');
       })
       .catch(error => {
-        console.log('error', error);
+        console.log('error-->', error);
 
-        // showToast(error.response.data.message);
+        // showToast(error.responses);
       })
       .finally(() => {
         setLoading(false);

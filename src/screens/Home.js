@@ -12,8 +12,24 @@ import {
 } from 'react-native';
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {login} from '../api/authAPI';
+import {useDispatch} from 'react-redux';
+import {authLogout} from '../redux/authSlice';
+import {clearUserToken} from '../shared/asyncStorage';
 
 const Home = ({navigation}) => {
+  const dispatch = useDispatch();
+
+  const logOut = () => {
+    dispatch(authLogout());
+    clearUserToken()
+      .then(() => {
+        navigation.navigate('OnBoard');
+      })
+      .catch(() => {
+        console.log('Handle me properly! Error clearing user token');
+      });
+  };
   function renderHome() {
     return (
       <SafeAreaView style={styles.container}>
@@ -32,6 +48,12 @@ const Home = ({navigation}) => {
                   Tap! {'\n'}to start IQ{'\n'}TEST
                 </Text>
               </ImageBackground>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              activeOpacity={0.5}
+              onPress={() => logOut()}>
+              <Text style={styles.buttonTextStyle}>Log Out</Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>
@@ -89,6 +111,25 @@ const styles = StyleSheet.create({
     color: COLORS.secondary,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  buttonStyle: {
+    backgroundColor: '#00BFA6',
+    borderWidth: 0,
+    color: '#FFFFFF',
+    borderColor: '#00BFA6',
+    height: 40,
+    alignItems: 'center',
+    borderRadius: 30,
+    marginLeft: 35,
+    marginRight: 35,
+    marginTop: 20,
+    marginBottom: 25,
+  },
+  buttonTextStyle: {
+    fontFamily: 'Oh Whale - TTF',
+    color: '#FFFFFF',
+    paddingVertical: 10,
+    fontSize: 16,
   },
 });
 

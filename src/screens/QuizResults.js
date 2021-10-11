@@ -13,7 +13,9 @@ import {
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
-const QuizResults = ({navigation}) => {
+const QuizResults = ({navigation, route}) => {
+  const {resData} = route.params;
+
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
@@ -31,9 +33,11 @@ const QuizResults = ({navigation}) => {
                     source={require('../assets/conlogo.png')}
                   />
                   <View>
-                    <Text style={styles.title}>
-                      Congratulations.!{'\n'}You got 9/10
-                    </Text>
+                    {resData.marks.marks ? (
+                      <Text style={styles.title}>
+                        Congratulations.!{'\n'}You got {resData.marks.marks}
+                      </Text>
+                    ) : null}
                     {/* <Text style={styles.title3}>
                       Veniam aliquip irure culpa aute aliqua nostrud magna velit
                       id veniam fugiat. Do voluptate tempor dolor adipisicing et

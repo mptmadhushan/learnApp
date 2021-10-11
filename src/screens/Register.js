@@ -17,22 +17,61 @@ import {
 
 import Loader from '../components/Loader';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {useDispatch} from 'react-redux';
+import {authSuccess} from '../redux/authSlice';
+import Toast from 'react-native-simple-toast';
+import {authRegAPI} from '../api/authRegAPI';
 
 const RegisterScreen = ({navigation}) => {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
+  const [fName, setFname] = useState('');
+  const [lName, setLname] = useState('');
+  const [uName, setUname] = useState('');
+  const [userPasswordConf, setUserPasswordConf] = useState('');
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
-
   const passwordInputRef = createRef();
+  const showToast = message => {
+    Toast.showWithGravity(message, Toast.SHORT, Toast.TOP);
+  };
+  const onPressReg = () => {
+    const payload = {
+      username: userEmail,
+      first_name: fName,
+      last_name: lName,
+      email: userEmail,
+      password: userPassword,
+      re_password: userPasswordConf,
+    };
 
+    setLoading(true);
+
+    authRegAPI(payload)
+      .then(response => {
+        if (response.error) {
+          console.log('error__<', response.error);
+          showToast('try again');
+          return;
+        }
+        const {data} = response;
+        console.log('res', response.data);
+        console.log('token', data.access);
+        navigation.navigate('Login');
+      })
+      .catch(error => {
+        console.log('error-->', error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   return (
     <View style={styles.mainBody}>
       <Loader loading={loading} />
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
-          flex: 1,
           justifyContent: 'center',
           alignContent: 'center',
         }}>
@@ -51,8 +90,8 @@ const RegisterScreen = ({navigation}) => {
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                onChangeText={UserEmail => setUserEmail(UserEmail)}
-                placeholder="Enter User Name" //dummy@abc.com
+                onChangeText={UserName => setUname(UserName)}
+                placeholder="User Name" //dummy@abc.com
                 placeholderTextColor="#8b9cb5"
                 autoCapitalize="none"
                 keyboardType="email-address"
@@ -67,8 +106,24 @@ const RegisterScreen = ({navigation}) => {
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                onChangeText={UserEmail => setUserEmail(UserEmail)}
-                placeholder="Enter User Address" //dummy@abc.com
+                onChangeText={UserEmail => setFname(UserEmail)}
+                placeholder="First Name" //dummy@abc.com
+                placeholderTextColor="#8b9cb5"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                returnKeyType="next"
+                onSubmitEditing={() =>
+                  passwordInputRef.current && passwordInputRef.current.focus()
+                }
+                underlineColorAndroid="#f000"
+                blurOnSubmit={false}
+              />
+            </View>
+            <View style={styles.SectionStyle}>
+              <TextInput
+                style={styles.inputStyle}
+                onChangeText={UserEmail => setFname(UserEmail)}
+                placeholder="Last Name" //dummy@abc.com
                 placeholderTextColor="#8b9cb5"
                 autoCapitalize="none"
                 keyboardType="email-address"
@@ -100,6 +155,21 @@ const RegisterScreen = ({navigation}) => {
               <TextInput
                 style={styles.inputStyle}
                 onChangeText={UserPassword => setUserPassword(UserPassword)}
+                placeholder="Enter Password" //12345
+                placeholderTextColor="#8b9cb5"
+                keyboardType="default"
+                ref={passwordInputRef}
+                onSubmitEditing={Keyboard.dismiss}
+                blurOnSubmit={false}
+                secureTextEntry={true}
+                underlineColorAndroid="#f000"
+                returnKeyType="next"
+              />
+            </View>
+            <View style={styles.SectionStyle}>
+              <TextInput
+                style={styles.inputStyle}
+                onChangeText={UserPassword => setUserPasswordConf(UserPassword)}
                 placeholder="Enter Password" //12345
                 placeholderTextColor="#8b9cb5"
                 keyboardType="default"

@@ -14,7 +14,7 @@ import useSound from 'react-native-use-sound';
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
-const QuizResults = ({navigation}) => {
+const QuizResults = ({navigation, route}) => {
   const [play, pause, stop, data] = useSound(
     'https://assets.mixkit.co/sfx/preview/mixkit-auditorium-moderate-applause-and-cheering-502.mp3',
   );
@@ -24,6 +24,8 @@ const QuizResults = ({navigation}) => {
 
     // play();
   };
+  const {resData} = route.params;
+
   const handlePlay = () => {
     navigation.navigate('Home');
     if (data.isPlaying) pause();
@@ -51,7 +53,7 @@ const QuizResults = ({navigation}) => {
                   />
                   <View>
                     <Text style={styles.title}>
-                      Congratulations.!{'\n'}You got 9/10
+                      Congratulations.!{'\n'}You got {resData.marks.marks}
                     </Text>
                     {/* <Text style={styles.title3}>
                       Veniam aliquip irure culpa aute aliqua nostrud magna velit

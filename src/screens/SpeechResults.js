@@ -13,7 +13,8 @@ import {
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
-const QuizResults = ({navigation}) => {
+const QuizResults = ({navigation, route}) => {
+  const {score} = route.params;
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
