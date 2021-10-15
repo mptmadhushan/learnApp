@@ -48,7 +48,7 @@ const Quiz = ({navigation}) => {
             <View style={styles.firstCard}>
               <ImageBackground
                 style={{height: '100%', width: '100%'}}
-                source={require('../assets/DrawingChameleon.jpeg')}></ImageBackground>
+                source={require('../assets/sun_uFYjKPL.png')}></ImageBackground>
               <Modal
                 animationType="slide"
                 transparent={true}
