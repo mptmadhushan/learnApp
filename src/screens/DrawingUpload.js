@@ -36,7 +36,7 @@ const DrawingUpload = ({navigation}) => {
       type: 'image/jpeg',
       name: 'sketch.jpg',
     });
-    formData.append('sketch_id', 6);
+    formData.append('sketch_id', 1);
     console.log(formData);
 
     sketchApi(formData)
