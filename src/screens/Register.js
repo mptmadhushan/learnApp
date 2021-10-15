@@ -37,7 +37,7 @@ const RegisterScreen = ({navigation}) => {
   };
   const onPressReg = () => {
     const payload = {
-      username: userEmail,
+      username: uName,
       first_name: fName,
       last_name: lName,
       email: userEmail,
@@ -46,7 +46,7 @@ const RegisterScreen = ({navigation}) => {
     };
 
     setLoading(true);
-
+    console.log(payload);
     authRegAPI(payload)
       .then(response => {
         if (response.error) {
@@ -122,7 +122,7 @@ const RegisterScreen = ({navigation}) => {
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                onChangeText={UserEmail => setFname(UserEmail)}
+                onChangeText={lastName => setLname(lastName)}
                 placeholder="Last Name" //dummy@abc.com
                 placeholderTextColor="#8b9cb5"
                 autoCapitalize="none"
@@ -184,7 +184,10 @@ const RegisterScreen = ({navigation}) => {
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}>{errortext}</Text>
             ) : null}
-            <TouchableOpacity style={styles.buttonStyle} activeOpacity={0.5}>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              activeOpacity={0.5}
+              onPress={() => onPressReg()}>
               <Text style={styles.buttonTextStyle}>Register</Text>
             </TouchableOpacity>
             <Text
