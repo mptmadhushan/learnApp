@@ -16,6 +16,8 @@ import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 import axios from 'axios';
 import {audioComparison} from '../api/audioApi';
 import AudioRecord from 'react-native-audio-record';
+import Toast from 'react-native-simple-toast';
+
 const Iq = ({navigation}) => {
   const handlePlay = () => {
     Tts.speak(currWord, {
@@ -126,6 +128,7 @@ const Iq = ({navigation}) => {
       .then(response => {
         if (response.error) {
           console.log('error', response.error);
+          showToast('Error Try Again');
           // showToast(response.error);
           return;
         }
@@ -133,9 +136,11 @@ const Iq = ({navigation}) => {
         const {data} = response;
         console.log('res', data);
         setScore(data);
+        showToast('Press Continue');
       })
       .catch(error => {
         console.log('error', error);
+        showToast('Error Try Again');
 
         // showToast(error.response.data.message);
       })
@@ -163,6 +168,9 @@ const Iq = ({navigation}) => {
     axios.get(url).then(response => {
       console.log(response);
     });
+  };
+  const showToast = message => {
+    Toast.showWithGravity(message, Toast.SHORT, Toast.TOP);
   };
   function renderQuiz() {
     return (

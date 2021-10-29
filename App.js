@@ -36,8 +36,6 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{headerShown: false}}
-          // initialRouteName={'QuizIndex'}>
-          // initialRouteName={'Speech'}>
           initialRouteName={'OnBoard'}>
           <Stack.Screen name="Home2" component={Tabs} />
           <Stack.Screen name="QuizNew" component={QuizNew} />

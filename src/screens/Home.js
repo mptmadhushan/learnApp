@@ -39,7 +39,7 @@ const Home = ({navigation}) => {
           <View style={styles.containerNew}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('IQ');
+                navigation.navigate('DrawingTest');
               }}>
               <ImageBackground
                 style={{height: '100%', width: '100%'}}

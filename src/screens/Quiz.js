@@ -16,98 +16,12 @@ import useSound from 'react-native-use-sound';
 import {getQuizAPI} from '../api/getQuizAPI';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 import {getResultAPI} from '../api/getResultAPI';
+import {getFirstQ} from '../api/getFirstQ';
+import {getNextQ} from '../api/getNextQ';
 
 const Quiz = ({navigation}) => {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [showScore, setShowScore] = useState(false);
-  const [score, setScore] = useState(0);
-  const [currQuiz, setCurrQuiz] = useState(1);
-  const [modalVisible, setModalVisible] = useState(true);
-  const [Quiz, setQuiz] = useState();
-  const [theArray, setTheArray] = useState([]);
-  const [time, setTime] = useState();
-
-  const numbers = [1, 2, 3, 4, 6, 7, 8, 9, 10];
-
-  const [play, pause, stop, data] = useSound(
-    'https://assets.mixkit.co/sfx/preview/mixkit-tick-tock-clock-timer-1045.mp3',
-  );
-  const handlePlay = () => {
-    console.log('play');
-    play();
-  };
-  const navi = () => {
-    console.log('navi');
-    navigation.navigate('QuizResults');
-  };
-  const navigateTores = newArr => {
-    if (newArr.length === 10) {
-      console.log('arr length', newArr);
-      getResultAPI(newArr)
-        .then(response => {
-          if (response.error) {
-            console.log('error', response.error);
-            // showToast(response.error);
-            return;
-          }
-          const resData = response.data;
-          console.log('res', resData);
-
-          navigation.navigate('QuizResults', {resData});
-        })
-        .catch(error => {
-          console.log('error', error);
-        })
-        .finally(() => {
-          console.log('response');
-        });
-      // navigation.navigate('IQResults');
-    }
-  };
-
-  const handleAnswerOptionClick = (selectedAns, isCorrect, id) => {
-    var end = Date.now();
-    const milles = end - time;
-    var seconds = ((milles % 60000) / 1000).toFixed(0);
-    const ansToSend = {
-      question: id,
-      given_answer: selectedAns,
-      time_taken: seconds,
-    };
-    setTheArray(theArray => [...theArray, ansToSend]);
-
-    if (currQuiz < Quiz.length) {
-      if (selectedAns !== isCorrect) {
-        console.log('wrong');
-        // handlePlay();
-      }
-      if (selectedAns === isCorrect) {
-        console.log('correct');
-        // handlePlay();
-        setScore(score + 1);
-      }
-      setCurrQuiz(currQuiz + 1);
-      const nextQuestion = currentQuestion + 1;
-      if (nextQuestion < Quiz.length) {
-        setCurrentQuestion(nextQuestion);
-      } else {
-        setShowScore(true);
-      }
-    } else {
-      pause();
-      const newArr = theArray;
-      setTimeout(() => {
-        navigateTores(newArr);
-        // score
-      }, 200);
-    }
-  };
-  const handlePlay2 = () => {
-    setModalVisible(!modalVisible);
-    setTime(Date.now());
-  };
   useEffect(() => {
-    getQuizAPI()
+    getFirstQ()
       .then(response => {
         if (response.error) {
           console.log('error', response.error);
@@ -115,8 +29,7 @@ const Quiz = ({navigation}) => {
           return;
         }
         const {data} = response;
-        setQuiz(data);
-        console.log(data);
+        setIq(data);
       })
       .catch(error => {
         console.log(error);
@@ -126,6 +39,97 @@ const Quiz = ({navigation}) => {
       });
     // handlePlay();
   }, []);
+
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [Quiz, setIq] = useState();
+  const [time, setTime] = useState();
+  const [modalVisible, setModalVisible] = useState(true);
+  const [currQuiz, setCurrQuiz] = useState(1);
+  const [theArray, setTheArray] = useState([]);
+  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // const SomeRandomArray = [];
+  const [play, pause, stop] = useSound(
+    'https://assets.mixkit.co/sfx/preview/mixkit-tick-tock-clock-timer-1045.mp3',
+  );
+
+  const handlePlay2 = () => {
+    setModalVisible(!modalVisible);
+    console.log('play');
+    setTime(Date.now());
+    play();
+  };
+  const navigateTores = () => {
+    console.log('response 🍡');
+    console.log(theArray.length);
+    if (theArray.length === 10) {
+      console.log('arr length', theArray);
+      getResultAPI(theArray)
+        .then(response => {
+          if (response.error) {
+            console.log('error', response.error);
+            // showToast(response.error);
+            return;
+          }
+          const resData = response.data;
+          console.log('res', resData);
+          navigation.navigate('QuizResults', {resData});
+        })
+        .catch(error => {
+          console.log('error', error);
+        })
+        .finally(() => {
+          console.log('response');
+        });
+    }
+  };
+
+  const handleAnswerOptionClick = (selectedAns, id) => {
+    var end = Date.now();
+    const milles = end - time;
+    var seconds = ((milles % 60000) / 1000).toFixed(0);
+    const ansToSend = {
+      question: id,
+      given_answer: selectedAns,
+      time_taken: seconds,
+    };
+    // SomeRandomArray.push(ansToSend);
+    console.log('currQuiz', currQuiz);
+    // console.log('ansToSend', ansToSend);
+    // console.log('theArray', theArray);
+    setTheArray(theArray => [...theArray, ansToSend]);
+    if (currQuiz < 12) {
+      setCurrQuiz(currQuiz + 1);
+      const preQ = {
+        id: id,
+        answer: selectedAns,
+        time_taken: seconds,
+      };
+      getNextQ(preQ)
+        .then(response => {
+          if (response.error) {
+            console.log('error', response.error);
+            // showToast(response.error);
+            return;
+          }
+          const {data} = response;
+          setIq(data);
+          console.log(data);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        .finally(() => {
+          // setLoading(false);
+        });
+      if (currQuiz > 10) {
+        const newArr = theArray;
+        // setTimeout(() => {
+        console.log('naci');
+        navigateTores();
+        // }, 200);
+      }
+    }
+  };
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
@@ -231,8 +235,7 @@ const Quiz = ({navigation}) => {
                     <TouchableOpacity
                       onPress={() =>
                         handleAnswerOptionClick(
-                          Quiz[currentQuestion].dummy_answer1,
-                          Quiz[currentQuestion].answer,
+                          Quiz[currentQuestion].answers[0],
                           Quiz[currentQuestion].id,
                         )
                       }>
@@ -244,14 +247,13 @@ const Quiz = ({navigation}) => {
                           fontSize: 20,
                           // marginTop: SIZES.height / 10,
                         }}>
-                        {Quiz[currentQuestion].dummy_answer1}
+                        {Quiz[currentQuestion].answers[0]}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() =>
                         handleAnswerOptionClick(
-                          Quiz[currentQuestion].dummy_answer2,
-                          Quiz[currentQuestion].answer,
+                          Quiz[currentQuestion].answers[1],
                           Quiz[currentQuestion].id,
                         )
                       }>
@@ -263,14 +265,13 @@ const Quiz = ({navigation}) => {
                           fontSize: 20,
                           // marginTop: SIZES.height / 10,
                         }}>
-                        {Quiz[currentQuestion].dummy_answer2}
+                        {Quiz[currentQuestion].answers[1]}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() =>
                         handleAnswerOptionClick(
-                          Quiz[currentQuestion].answer,
-                          Quiz[currentQuestion].answer,
+                          Quiz[currentQuestion].answers[2],
                           Quiz[currentQuestion].id,
                         )
                       }>
@@ -282,46 +283,12 @@ const Quiz = ({navigation}) => {
                           fontSize: 20,
                           // marginTop: SIZES.height / 10,
                         }}>
-                        {Quiz[currentQuestion].answer}
+                        {Quiz[currentQuestion].answers[2]}
                       </Text>
                     </TouchableOpacity>
-                    {/* {questions[currentQuestion].answerOptions.map(
-                    (answerOption, i) => (
-                      <TouchableOpacity
-                        key={i}
-                        onPress={() =>
-                          handleAnswerOptionClick(answerOption.isCorrect)
-                        }>
-                        <Text
-                          style={{
-                            color: COLORS.secondary,
-                            // fontWeight: 'bold',
-                            fontFamily: 'Oh Whale - TTF',
-                            fontSize: 20,
-                            // marginTop: SIZES.height / 10,
-                          }}>
-                          {answerOption.answerText}
-                        </Text>
-                      </TouchableOpacity>
-                    ),
-                  )} */}
                   </View>
                 ) : null}
               </ImageBackground>
-              {/* <View
-                style={{
-                  textAlign: 'center',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <TouchableOpacity
-                  style={styles.buttonStyle}
-                  activeOpacity={0.5}
-                  onPress={() => navigation.navigate('QuizResults')}>
-                  <Text style={styles.buttonTextStyle}>Continue</Text>
-                </TouchableOpacity>
-              </View> */}
             </View>
           </View>
         </ImageBackground>

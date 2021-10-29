@@ -52,7 +52,8 @@ const QuizResults = ({navigation, route}) => {
                       </Text> */}
                       {score ? (
                         <Text style={styles.title4}>
-                          You got {score.score} marks
+                          You got {score.score} marks{'\n'}
+                          {score.detail}
                         </Text>
                       ) : null}
                     </ImageBackground>
@@ -229,9 +230,11 @@ const styles = StyleSheet.create({
   },
   title4: {
     fontFamily: 'Oh Whale - TTF',
-    fontSize: 16,
+    fontSize: 14,
     color: COLORS.white,
     textAlign: 'center',
+    paddingLeft: '10%',
+    paddingRight: '10%',
   },
   title2: {
     fontSize: 15,

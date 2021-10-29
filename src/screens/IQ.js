@@ -15,11 +15,13 @@ import {
 import useSound from 'react-native-use-sound';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 import {getQuizAPI} from '../api/getQuizAPI';
+import {getFirstQ} from '../api/getFirstQ';
+import {getNextQ} from '../api/getNextQ';
 import {getResultAPI} from '../api/getResultAPI';
 
 const Iq = ({navigation}) => {
   useEffect(() => {
-    getQuizAPI()
+    getFirstQ()
       .then(response => {
         if (response.error) {
           console.log('error', response.error);
@@ -39,15 +41,13 @@ const Iq = ({navigation}) => {
   }, []);
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [showScore, setShowScore] = useState(false);
-  const [score, setScore] = useState(0);
   const [iqQuiz, setIq] = useState();
   const [time, setTime] = useState();
   const [modalVisible, setModalVisible] = useState(true);
   const [currQuiz, setCurrQuiz] = useState(1);
   const [theArray, setTheArray] = useState([]);
-  const numbers = [1, 2, 3, 4, 6, 7, 8, 9, 10];
-
+  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // const SomeRandomArray = [];
   const [play, pause, stop] = useSound(
     'https://assets.mixkit.co/sfx/preview/mixkit-tick-tock-clock-timer-1045.mp3',
   );
@@ -58,10 +58,12 @@ const Iq = ({navigation}) => {
     setTime(Date.now());
     play();
   };
-  const navigateTores = newArr => {
-    if (newArr.length === 10) {
-      console.log('arr length', newArr);
-      getResultAPI(newArr)
+  const navigateTores = () => {
+    console.log('response 🍡');
+    console.log(theArray.length);
+    if (theArray.length === 10) {
+      console.log('arr length', theArray);
+      getResultAPI(theArray)
         .then(response => {
           if (response.error) {
             console.log('error', response.error);
@@ -70,7 +72,6 @@ const Iq = ({navigation}) => {
           }
           const resData = response.data;
           console.log('res', resData);
-
           navigation.navigate('IQResults', {resData});
         })
         .catch(error => {
@@ -79,11 +80,10 @@ const Iq = ({navigation}) => {
         .finally(() => {
           console.log('response');
         });
-      // navigation.navigate('IQResults');
     }
   };
 
-  const handleAnswerOptionClick = (selectedAns, isCorrect, id) => {
+  const handleAnswerOptionClick = (selectedAns, id) => {
     var end = Date.now();
     const milles = end - time;
     var seconds = ((milles % 60000) / 1000).toFixed(0);
@@ -92,33 +92,42 @@ const Iq = ({navigation}) => {
       given_answer: selectedAns,
       time_taken: seconds,
     };
+    // SomeRandomArray.push(ansToSend);
+    console.log('currQuiz', currQuiz);
+    // console.log('ansToSend', ansToSend);
+    // console.log('theArray', theArray);
     setTheArray(theArray => [...theArray, ansToSend]);
-    // console.log(theArray);
-    if (currQuiz < iqQuiz.length) {
-      if (selectedAns !== isCorrect) {
-        console.log('wrong');
-        // handlePlay();
-      }
-      if (selectedAns === isCorrect) {
-        console.log('correct');
-        // handlePlay();
-        setScore(score + 1);
-      }
+    if (currQuiz < 12) {
       setCurrQuiz(currQuiz + 1);
-      const nextQuestion = currentQuestion + 1;
-      if (nextQuestion < iqQuiz.length) {
-        setTime(Date.now());
-        setCurrentQuestion(nextQuestion);
-      } else {
-        setShowScore(true);
+      const preQ = {
+        id: id,
+        answer: selectedAns,
+        time_taken: seconds,
+      };
+      getNextQ(preQ)
+        .then(response => {
+          if (response.error) {
+            console.log('error', response.error);
+            // showToast(response.error);
+            return;
+          }
+          const {data} = response;
+          setIq(data);
+          console.log(data);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        .finally(() => {
+          // setLoading(false);
+        });
+      if (currQuiz > 10) {
+        const newArr = theArray;
+        // setTimeout(() => {
+        console.log('naci');
+        navigateTores();
+        // }, 200);
       }
-    } else {
-      pause();
-      const newArr = theArray;
-      setTimeout(() => {
-        navigateTores(newArr);
-        // score
-      }, 200);
     }
   };
   function renderQuiz() {
@@ -227,8 +236,7 @@ const Iq = ({navigation}) => {
                     <TouchableOpacity
                       onPress={() =>
                         handleAnswerOptionClick(
-                          iqQuiz[currentQuestion].dummy_answer1,
-                          iqQuiz[currentQuestion].answer,
+                          iqQuiz[currentQuestion].answers[0],
                           iqQuiz[currentQuestion].id,
                         )
                       }>
@@ -240,14 +248,13 @@ const Iq = ({navigation}) => {
                           fontSize: 20,
                           // marginTop: SIZES.height / 10,
                         }}>
-                        {iqQuiz[currentQuestion].dummy_answer1}
+                        {iqQuiz[currentQuestion].answers[0]}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() =>
                         handleAnswerOptionClick(
-                          iqQuiz[currentQuestion].dummy_answer2,
-                          iqQuiz[currentQuestion].answer,
+                          iqQuiz[currentQuestion].answers[1],
                           iqQuiz[currentQuestion].id,
                         )
                       }>
@@ -259,14 +266,13 @@ const Iq = ({navigation}) => {
                           fontSize: 20,
                           // marginTop: SIZES.height / 10,
                         }}>
-                        {iqQuiz[currentQuestion].dummy_answer2}
+                        {iqQuiz[currentQuestion].answers[1]}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() =>
                         handleAnswerOptionClick(
-                          iqQuiz[currentQuestion].answer,
-                          iqQuiz[currentQuestion].answer,
+                          iqQuiz[currentQuestion].answers[2],
                           iqQuiz[currentQuestion].id,
                         )
                       }>
@@ -278,29 +284,9 @@ const Iq = ({navigation}) => {
                           fontSize: 20,
                           // marginTop: SIZES.height / 10,
                         }}>
-                        {iqQuiz[currentQuestion].answer}
+                        {iqQuiz[currentQuestion].answers[2]}
                       </Text>
                     </TouchableOpacity>
-                    {/* {questions[currentQuestion].answerOptions.map(
-                    (answerOption, i) => (
-                      <TouchableOpacity
-                        key={i}
-                        onPress={() =>
-                          handleAnswerOptionClick(answerOption.isCorrect)
-                        }>
-                        <Text
-                          style={{
-                            color: COLORS.secondary,
-                            // fontWeight: 'bold',
-                            fontFamily: 'Oh Whale - TTF',
-                            fontSize: 20,
-                            // marginTop: SIZES.height / 10,
-                          }}>
-                          {answerOption.answerText}
-                        </Text>
-                      </TouchableOpacity>
-                    ),
-                  )} */}
                   </View>
                 ) : null}
               </ImageBackground>

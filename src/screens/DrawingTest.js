@@ -1,6 +1,6 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {
   SafeAreaView,
@@ -13,12 +13,37 @@ import {
   FlatList,
   ImageBackground,
 } from 'react-native';
-
+import {getSketchApi} from '../api/getSketchApi';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
 const Quiz = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(true);
-
+  const [sketch, setSketch] = useState();
+  const [imageUrl, setImage] = useState();
+  // const imageUrl = require(`../assets/images/sketch/${ImageName}.png`);
+  useEffect(() => {
+    getSketchApi()
+      .then(response => {
+        if (response.error) {
+          console.log('error', response.error);
+          // showToast(response.error);
+          return;
+        }
+        const {data} = response;
+        setSketch(data);
+        console.log(data);
+        const newUrl = '.' + data.name;
+        setImage(newUrl);
+        console.log(newUrl);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+    // handlePlay();
+  }, []);
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
@@ -46,9 +71,11 @@ const Quiz = ({navigation}) => {
               </Text>
             </View>
             <View style={styles.firstCard}>
-              <ImageBackground
-                style={{height: '100%', width: '100%'}}
-                source={require('../assets/sun_uFYjKPL.png')}></ImageBackground>
+              {imageUrl ? (
+                <Image
+                  style={{height: '100%', width: '100%'}}
+                  source={`${images + '.' + imageUrl}`}></Image>
+              ) : null}
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -100,8 +127,8 @@ const Quiz = ({navigation}) => {
                       fontSize: 15,
                       textAlign: 'center',
                     }}>
-                    Dolore ea cillum deserunt consequat magna ullamco
-                    reprehenderit ex in.
+                    Please Draw the image showing in screen on paper. and then
+                    press continue
                   </Text>
                 </View>
                 <ImageBackground
@@ -127,7 +154,9 @@ const Quiz = ({navigation}) => {
                 <TouchableOpacity
                   style={styles.buttonStyle}
                   activeOpacity={0.5}
-                  onPress={() => navigation.navigate('DrawingUpload')}>
+                  onPress={() =>
+                    navigation.navigate('DrawingUpload', {sketch})
+                  }>
                   <Text style={styles.buttonTextStyle}>Continue</Text>
                 </TouchableOpacity>
               </View>

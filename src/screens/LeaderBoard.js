@@ -95,6 +95,7 @@ const LeaderBoard = ({navigation}) => {
                 <Text style={styles.title3}>
                   {resp.grade} : {resp.detail}
                 </Text>
+                <Text style={styles.title3}>Prediction: {resp.pred}</Text>
               </View>
             ) : null}
             <View

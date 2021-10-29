@@ -16,7 +16,9 @@ import {sketchApi} from '../api/sketchApi';
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
-const DrawingUpload = ({navigation}) => {
+const DrawingUpload = ({navigation, route}) => {
+  const {sketch} = route.params;
+
   const [modalVisible, setModalVisible] = useState(true);
   let camera;
   const takePicture = async () => {
@@ -28,7 +30,7 @@ const DrawingUpload = ({navigation}) => {
     }
   };
   const uploadSketch = async fileUrl => {
-    console.log('upload');
+    console.log('upload', sketch);
     console.log('🧑‍🚀🧑‍🚀', fileUrl);
     let formData = new FormData();
     formData.append('image', {
