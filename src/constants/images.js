@@ -5,6 +5,11 @@ const sun = require('../assets/images/sketch/sun.png');
 const face = require('../assets/images/sketch/face.png');
 const crown = require('../assets/images/sketch/crown.png');
 const bird = require('../assets/images/sketch/bird.png');
+const house = require('../assets/images/sketch/house.png');
+const envelope = require('../assets/images/sketch/envelope.png');
+const flower = require('../assets/images/sketch/flower.jpg');
+const fish = require('../assets/images/sketch/fish.jpg');
+const star = require('../assets/images/sketch/star.png');
 
 export default {
   risk,
@@ -14,4 +19,9 @@ export default {
   face,
   crown,
   bird,
+  star,
+  fish,
+  house,
+  flower,
+  envelope,
 };

@@ -28,6 +28,7 @@ const RegisterScreen = ({navigation}) => {
   const [fName, setFname] = useState('');
   const [lName, setLname] = useState('');
   const [uName, setUname] = useState('');
+  const [age, setAge] = useState('');
   const [userPasswordConf, setUserPasswordConf] = useState('');
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
@@ -40,6 +41,7 @@ const RegisterScreen = ({navigation}) => {
       username: uName,
       first_name: fName,
       last_name: lName,
+      age: parseInt(age, 10),
       email: userEmail,
       password: userPassword,
       re_password: userPasswordConf,
@@ -127,6 +129,22 @@ const RegisterScreen = ({navigation}) => {
                 placeholderTextColor="#8b9cb5"
                 autoCapitalize="none"
                 keyboardType="email-address"
+                returnKeyType="next"
+                onSubmitEditing={() =>
+                  passwordInputRef.current && passwordInputRef.current.focus()
+                }
+                underlineColorAndroid="#f000"
+                blurOnSubmit={false}
+              />
+            </View>
+            <View style={styles.SectionStyle}>
+              <TextInput
+                style={styles.inputStyle}
+                onChangeText={age1 => setAge(age1)}
+                placeholder="Age" //dummy@abc.com
+                placeholderTextColor="#8b9cb5"
+                autoCapitalize="none"
+                keyboardType="numeric"
                 returnKeyType="next"
                 onSubmitEditing={() =>
                   passwordInputRef.current && passwordInputRef.current.focus()

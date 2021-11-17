@@ -17,6 +17,7 @@ import axios from 'axios';
 import {audioComparison} from '../api/audioApi';
 import AudioRecord from 'react-native-audio-record';
 import Toast from 'react-native-simple-toast';
+import Loader from '../components/Loader';
 
 const Iq = ({navigation}) => {
   const handlePlay = () => {
@@ -51,6 +52,7 @@ const Iq = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(true);
   const [image, setImage] = useState('');
   const [score, setScore] = useState('');
+  const [loading, setLoading] = useState(false);
   const [currWord, setCurWord] = useState(
     words[Math.floor(Math.random() * words.length)],
   );
@@ -113,11 +115,13 @@ const Iq = ({navigation}) => {
     };
   };
   const uploadAudio = async fileUrl => {
+    setLoading(true);
+
     console.log('upload');
     console.log('🧑‍🚀🧑‍🚀', fileUrl);
     let formData = new FormData();
     formData.append('audio', {
-      uri: 'file:///data/user/0/com.learnapp/files/test.wav',
+      uri: 'file:///data/user/0/com.welipilla/files/test.wav',
       type: 'audio/wav',
       name: 'test.wav',
     });
@@ -136,6 +140,8 @@ const Iq = ({navigation}) => {
         const {data} = response;
         console.log('res', data);
         setScore(data);
+        setLoading(false);
+
         showToast('Press Continue');
       })
       .catch(error => {
@@ -170,7 +176,7 @@ const Iq = ({navigation}) => {
     });
   };
   const showToast = message => {
-    Toast.showWithGravity(message, Toast.SHORT, Toast.TOP);
+    Toast.showWithGravity(message, Toast.LONG, Toast.BOTTOM);
   };
   function renderQuiz() {
     return (
@@ -201,6 +207,8 @@ const Iq = ({navigation}) => {
             </View>
           </Modal>
           <View style={styles.containerNew}>
+            <Loader loading={loading} />
+
             <View
               style={{
                 textAlign: 'center',

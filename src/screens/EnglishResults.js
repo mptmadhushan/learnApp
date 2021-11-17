@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -10,46 +10,80 @@ import {
   FlatList,
   ImageBackground,
 } from 'react-native';
+import useSound from 'react-native-use-sound';
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
 const QuizResults = ({navigation, route}) => {
-  const {score} = route.params;
+  const [play, pause, stop, data] = useSound(
+    'https://assets.mixkit.co/sfx/preview/mixkit-auditorium-moderate-applause-and-cheering-502.mp3',
+  );
+  const handlePlay2 = () => {
+    // console.log('jello');
+    navigation.navigate('Home');
+
+    // play();
+  };
+  const {resData} = route.params;
+
+  const handlePlay = () => {
+    navigation.navigate('Home');
+    if (data.isPlaying) pause();
+    // // else
+    // stop();
+  };
+  useEffect(() => {
+    play();
+  }, []);
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={{flex: 1}}
-          source={require('../assets/CONGRATS.png')}>
-          <View style={styles.containerNew}>
-            <TouchableOpacity style={styles.container2}>
-              <View style={styles.firstCard}>
-                <Image
-                  style={{height: '100%', width: '50%'}}
-                  source={require('../assets/conlogo.png')}
-                />
-                <View
-                  style={{backgroundColor: COLORS.secondary, borderRadius: 30}}>
-                  <Text style={styles.title}>Congratulations.!</Text>
-                  <Text style={styles.title3}>SCORE: 9.6</Text>
-                  <Text style={styles.title3}>OVERALL PERFORMANCE: 9.6</Text>
-                  <Text style={styles.title3}>
-                    COMMENTS: Eu culpa exercitation ut reprehenderit occaecat
-                    deserunt tempor elit ullamco sint sint.
-                  </Text>
-                  <Text style={styles.title3}>
-                    IMPROVEMENTS: Qui ea amet laboris mollit mollit occaecat.
-                  </Text>
+          source={require('../assets/6ob.gif')}>
+          <ImageBackground
+            style={{flex: 1}}
+            source={require('../assets/CONGRATS.png')}>
+            <View style={styles.containerNew}>
+              <TouchableOpacity style={styles.container2}>
+                <View style={styles.firstCard}>
+                  <Image
+                    style={{height: '100%', width: '50%'}}
+                    source={require('../assets/conlogo.png')}
+                  />
+                  <View>
+                    <Text style={styles.title}>
+                      Congratulations.!{'\n'}You got {resData.marks.marks}
+                    </Text>
+                    {/* <Text style={styles.title3}>
+                      Veniam aliquip irure culpa aute aliqua nostrud magna velit
+                      id veniam fugiat. Do voluptate tempor dolor adipisicing et
+                      ex eiusmod ea aliquip. Proident sint qui laborum dolor
+                      Lorem ullamco sint ad incididunt aliquip aute irure ut
+                      deserunt. Quis velit dolore adipisicing ullamco dolore sit
+                      labore duis adipisicing aute cupidatat adipisicing.
+                      Deserunt esse aliqua aute mollit exercitation incididunt
+                      eiusmod magna cupidatat sunt minim quis occaecat non.
+                    </Text> */}
+                    <TouchableOpacity
+                      style={styles.buttonStyle}
+                      activeOpacity={0.5}
+                      onPress={() => navigation.navigate('Quiz')}>
+                      <Text style={styles.buttonTextStyle}>
+                        Memory Recalling Quiz
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.buttonStyle2}
+                      activeOpacity={0.5}
+                      onPress={() => handlePlay2()}>
+                      <Text style={styles.buttonTextStyle}>Home</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <TouchableOpacity
-                  style={styles.buttonStyle}
-                  activeOpacity={0.5}
-                  onPress={() => navigation.navigate('Home')}>
-                  <Text style={styles.buttonTextStyle}>HOME</Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          </View>
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
         </ImageBackground>
       </SafeAreaView>
     );
@@ -60,14 +94,15 @@ const QuizResults = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
   buttonTextStyle: {
+    fontFamily: 'Oh Whale - TTF',
     color: '#FFFFFF',
     fontSize: 16,
   },
   buttonStyle: {
-    backgroundColor: COLORS.fourth,
+    backgroundColor: COLORS.secondary,
     borderWidth: 0,
     color: COLORS.third,
-    borderColor: COLORS.fourth,
+    borderColor: '#00BFA6',
     height: 40,
     width: SIZES.width / 1.5,
     alignItems: 'center',
@@ -75,7 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginLeft: 35,
     marginRight: 35,
-    marginTop: 40,
+    marginTop: 30,
     marginBottom: 25,
   },
   buttonStyle2: {
@@ -90,7 +125,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginLeft: 35,
     marginRight: 35,
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 25,
   },
   number: {
@@ -128,12 +163,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     height: SIZES.height / 4,
     width: '80%',
+    marginTop: SIZES.width / 4,
     flexDirection: 'column',
     justifyContent: 'center',
-    // backgroundColor: COLORS.primary,
     alignItems: 'center',
-    borderRadius: 50,
-    marginTop: 30,
+    borderRadius: 30,
   },
   secondCard: {
     display: 'flex',
@@ -156,7 +190,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primary,
   },
   container2: {
     flex: 1,
@@ -195,12 +229,13 @@ const styles = StyleSheet.create({
     fontSize: 25,
     padding: 15,
     color: COLORS.third,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily: 'Oh Whale - TTF',
     textAlign: 'center',
   },
   title3: {
-    fontSize: 15,
-    padding: 5,
+    fontSize: 10,
+    padding: 15,
     color: COLORS.third,
     textAlign: 'center',
   },

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -10,49 +10,72 @@ import {
   FlatList,
   ImageBackground,
 } from 'react-native';
-
+// import {Avatar} from 'react-native-elements';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {getFinalPredictApi} from '../api/getFinaPredictionAPI';
 
-const DrawingResults = ({navigation, route}) => {
-  const {resData} = route.params;
+const FinalPrediction = ({navigation}) => {
+  const [res, setRes] = useState(0);
+  const userResults = {
+    iq_marks: 5,
+    iq_time_taken: 5,
+    'math_marks ': 5,
+    math_time_taken: 5,
+    english_marks: 5,
+    english_time_taken: 5,
+    drawing_marks: 5,
+    speaking_marks: 5,
+  };
+  useEffect(() => {
+    console.log('tag', userResults);
+    getFinalPredictApi(userResults)
+      .then(response => {
+        if (response.error) {
+          console.log('error', response);
+          // showToast(response.error);
+          return;
+        }
+        const {data} = response;
+        setRes(data);
+        // setLoading(false);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+    // handlePlay();
+  }, []);
+
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={{flex: 1}}
-          source={require('../assets/CONGRATS.png')}>
-          <View style={styles.containerNew}>
-            <TouchableOpacity style={styles.container2}>
-              <View style={styles.firstCard}>
-                <Image
-                  style={{height: '100%', width: '50%'}}
-                  source={require('../assets/drawRes.png')}
-                />
-                {resData ? (
-                  <View
-                    style={{
-                      backgroundColor: COLORS.secondary,
-                      borderRadius: 30,
-                      padding: 10,
-                    }}>
-                    <Text style={styles.title}>Drawing Results.!</Text>
-                    <Text style={styles.title3}>ACCURACY:{resData.score}</Text>
-                    <Text style={styles.title3}>{resData.detail}</Text>
-                    <Text style={styles.title3}>
-                      "Skill full" - your's child drawing skills are amazing,
-                      rather than other children of this age.
-                    </Text>
-                  </View>
-                ) : null}
-                <TouchableOpacity
-                  style={styles.buttonStyle}
-                  activeOpacity={0.5}
-                  onPress={() => navigation.navigate('FinalPerformance')}>
-                  <Text style={styles.buttonTextStyle}>Next</Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          </View>
+          source={require('../assets/final.jpg')}>
+          <ImageBackground
+            style={{flex: 1}}
+            source={require('../assets/6ob.gif')}>
+            <View>
+              <Text style={styles.title}>predict performance</Text>
+            </View>
+            <View>
+              <Text style={styles.title2}>Skillfull..!</Text>
+            </View>
+            <Text style={styles.title2}>
+              Student most probably gain grade Skillfull end of the year.
+            </Text>
+
+            <View style={{display: 'flex', alignItems: 'center'}}>
+              <TouchableOpacity
+                style={styles.buttonStyle2}
+                activeOpacity={0.5}
+                onPress={() => navigation.navigate('Final')}>
+                <Text style={styles.buttonTextStyle}>Continue</Text>
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
         </ImageBackground>
       </SafeAreaView>
     );
@@ -62,6 +85,14 @@ const DrawingResults = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  number: {
+    height: SIZES.height / 25,
+    width: SIZES.height / 25,
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+  },
   buttonTextStyle: {
     color: '#FFFFFF',
     fontSize: 16,
@@ -70,16 +101,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.fourth,
     borderWidth: 0,
     color: COLORS.third,
-    borderColor: COLORS.fourth,
+    borderColor: '#00BFA6',
     height: 40,
     width: SIZES.width / 1.5,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 40,
-    marginBottom: 25,
+    marginTop: 10,
   },
   buttonStyle2: {
     backgroundColor: COLORS.fourth,
@@ -96,47 +124,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 25,
   },
-  number: {
-    height: SIZES.height / 20,
-    width: SIZES.height / 20,
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
-  },
-  number1: {
-    height: SIZES.height / 20,
-    width: SIZES.height / 20,
-    backgroundColor: COLORS.fourth,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
-  },
-  answerBtn: {
-    height: SIZES.height / 20,
-    width: SIZES.width / 2.5,
-    backgroundColor: COLORS.fourth,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
-    margin: 10,
-  },
-  containerNew: {
-    flex: 1,
+  leaderBack: {
+    marginTop: 8,
     display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-  },
-  firstCard: {
-    display: 'flex',
-    height: SIZES.height / 4,
-    width: '80%',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    // backgroundColor: COLORS.primary,
+    height: SIZES.height / 10,
+    width: '90%',
+    backgroundColor: COLORS.fourth,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    borderRadius: 50,
-    marginTop: SIZES.height / 8,
+    borderRadius: 30,
   },
   secondCard: {
     display: 'flex',
@@ -194,23 +191,31 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   title: {
-    // marginTop: -21,
+    marginTop: SIZES.height / 2.7,
+    fontSize: 30,
+    padding: 15,
+    color: COLORS.secondary,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  title3: {
+    fontSize: 12,
+    padding: 15,
+    color: COLORS.white,
+    textAlign: 'center',
+  },
+  title2: {
     fontSize: 25,
     padding: 15,
     color: COLORS.white,
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  title3: {
-    fontSize: 15,
-    padding: 5,
-    color: COLORS.white,
-    textAlign: 'center',
-  },
-  title2: {
-    fontSize: 15,
-    padding: 10,
-    color: COLORS.secondary,
+  title4: {
+    fontSize: 20,
+    // padding: 15,
+    color: COLORS.fourth,
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -224,4 +229,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DrawingResults;
+export default FinalPrediction;

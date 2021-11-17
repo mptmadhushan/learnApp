@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Modal,
   FlatList,
   ImageBackground,
 } from 'react-native';
@@ -30,6 +31,7 @@ const LeaderBoard = ({navigation}) => {
     },
   ];
   const [resp, setResp] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     getOverallResultAPI()
@@ -58,6 +60,26 @@ const LeaderBoard = ({navigation}) => {
         <ImageBackground
           style={{flex: 1}}
           source={require('../assets/CONGRATS.png')}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <View>
+                  <Text style={styles.title22}>Prediction</Text>
+                </View>
+                {resp ? <Text style={styles.title3}>{resp.pred}</Text> : null}
+                <TouchableOpacity
+                  disabled={!toggleCheckBox}
+                  style={styles.buttonStyle3}
+                  activeOpacity={0.5}
+                  onPress={() => setModalVisible(!modalVisible)}>
+                  <Text style={styles.buttonTextStyle}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
           <ImageBackground
             style={{flex: 1}}
             source={require('../assets/6ob.gif')}>
@@ -95,7 +117,6 @@ const LeaderBoard = ({navigation}) => {
                 <Text style={styles.title3}>
                   {resp.grade} : {resp.detail}
                 </Text>
-                <Text style={styles.title3}>Prediction: {resp.pred}</Text>
               </View>
             ) : null}
             <View
@@ -116,6 +137,12 @@ const LeaderBoard = ({navigation}) => {
               </Text>
             </View>
             <View style={{display: 'flex', alignItems: 'center'}}>
+              <TouchableOpacity
+                style={styles.buttonStyle2}
+                activeOpacity={0.5}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.buttonTextStyle}>Prediction</Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 disabled={!toggleCheckBox}
                 style={styles.buttonStyle2}
@@ -174,6 +201,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 25,
   },
+  buttonStyle3: {
+    backgroundColor: COLORS.fourth,
+    borderWidth: 0,
+    color: COLORS.third,
+    borderColor: '#ff6150',
+    height: 40,
+    width: 150,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginLeft: 35,
+    marginRight: 35,
+    marginTop: 20,
+    marginBottom: 25,
+  },
   leaderBack: {
     marginTop: 8,
     display: 'flex',
@@ -184,6 +226,27 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     borderRadius: 30,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#111',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   secondCard: {
     display: 'flex',
@@ -242,6 +305,14 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: SIZES.height / 6.5,
+    fontSize: 25,
+    padding: 15,
+    color: COLORS.third,
+    textAlign: 'center',
+    fontFamily: 'LuckiestGuy-Regular',
+  },
+  title22: {
+    marginTop: 6.5,
     fontSize: 25,
     padding: 15,
     color: COLORS.third,

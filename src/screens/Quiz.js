@@ -15,13 +15,16 @@ import useSound from 'react-native-use-sound';
 
 import {getQuizAPI} from '../api/getQuizAPI';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
-import {getResultAPI} from '../api/getResultAPI';
-import {getFirstQ} from '../api/getFirstQ';
+import {getResultAPIMath} from '../api/getResultAPIMath';
+import {getFirstQMath} from '../api/getFirstQMath';
 import {getNextQ} from '../api/getNextQ';
+import Loader from '../components/Loader';
+import {storeMathMarks} from '../shared/asyncStorage';
 
 const Quiz = ({navigation}) => {
   useEffect(() => {
-    getFirstQ()
+    setLoading(true);
+    getFirstQMath()
       .then(response => {
         if (response.error) {
           console.log('error', response.error);
@@ -30,6 +33,7 @@ const Quiz = ({navigation}) => {
         }
         const {data} = response;
         setIq(data);
+        setLoading(false);
       })
       .catch(error => {
         console.log(error);
@@ -44,9 +48,12 @@ const Quiz = ({navigation}) => {
   const [Quiz, setIq] = useState();
   const [time, setTime] = useState();
   const [modalVisible, setModalVisible] = useState(true);
-  const [currQuiz, setCurrQuiz] = useState(1);
+  const [currQuiz, setCurrQuiz] = useState(0);
   const [theArray, setTheArray] = useState([]);
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const [loading, setLoading] = useState(false);
+  const [endTime, setEndTime] = useState(Date.now());
+
   // const SomeRandomArray = [];
   const [play, pause, stop] = useSound(
     'https://assets.mixkit.co/sfx/preview/mixkit-tick-tock-clock-timer-1045.mp3',
@@ -59,11 +66,12 @@ const Quiz = ({navigation}) => {
     play();
   };
   const navigateTores = () => {
+    setLoading(false);
     console.log('response 🍡');
     console.log(theArray.length);
     if (theArray.length === 10) {
       console.log('arr length', theArray);
-      getResultAPI(theArray)
+      getResultAPIMath(theArray)
         .then(response => {
           if (response.error) {
             console.log('error', response.error);
@@ -72,6 +80,9 @@ const Quiz = ({navigation}) => {
           }
           const resData = response.data;
           console.log('res', resData);
+          storeMathMarks(resData).then(result =>
+            console.log('Remove me if not needed Iq', result),
+          );
           navigation.navigate('QuizResults', {resData});
         })
         .catch(error => {
@@ -84,8 +95,8 @@ const Quiz = ({navigation}) => {
   };
 
   const handleAnswerOptionClick = (selectedAns, id) => {
-    var end = Date.now();
-    const milles = end - time;
+    setTime(Date.now());
+    const milles = endTime - time;
     var seconds = ((milles % 60000) / 1000).toFixed(0);
     const ansToSend = {
       question: id,
@@ -102,29 +113,36 @@ const Quiz = ({navigation}) => {
       const preQ = {
         id: id,
         answer: selectedAns,
-        time_taken: seconds,
+        time_taken: parseInt(seconds),
       };
+      setLoading(true);
+
       getNextQ(preQ)
         .then(response => {
           if (response.error) {
             console.log('error', response.error);
             // showToast(response.error);
+            setLoading(false);
             return;
           }
           const {data} = response;
           setIq(data);
           console.log(data);
+          setLoading(false);
         })
         .catch(error => {
           console.log(error);
+          setLoading(false);
         })
         .finally(() => {
           // setLoading(false);
         });
-      if (currQuiz > 10) {
+      if (currQuiz > 8) {
         const newArr = theArray;
+        setLoading(true);
         // setTimeout(() => {
         console.log('naci');
+
         navigateTores();
         // }, 200);
       }
@@ -177,6 +195,7 @@ const Quiz = ({navigation}) => {
             </View>
           </Modal>
           <View style={styles.containerNew}>
+            <Loader loading={loading} />
             <View style={styles.container2}>
               {/* <Text style={{color: COLORS.third}}>Please elect answer</Text> */}
               <View style={styles.container3}>

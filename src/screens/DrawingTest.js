@@ -17,31 +17,82 @@ import {getSketchApi} from '../api/getSketchApi';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
 const Quiz = ({navigation}) => {
+  const drawings = [
+    {
+      id: 2,
+      image: images.face,
+      name: 'face',
+    },
+    {
+      id: 3,
+      image: images.house,
+      name: 'house',
+    },
+    {
+      id: 4,
+      image: images.ant,
+      name: 'ant',
+    },
+    {
+      id: 5,
+      image: images.bird,
+      name: 'bird',
+    },
+    {
+      id: 6,
+      image: images.envelope,
+      name: 'envelope',
+    },
+    {
+      id: 7,
+      image: images.flower,
+      name: 'flower',
+    },
+    {
+      id: 8,
+      image: images.fish,
+      name: 'fish',
+    },
+    {
+      id: 9,
+      image: images.star,
+      name: 'star',
+    },
+    {
+      id: 10,
+      image: images.sun,
+      name: 'sun',
+    },
+  ];
   const [modalVisible, setModalVisible] = useState(true);
   const [sketch, setSketch] = useState();
   const [imageUrl, setImage] = useState();
   // const imageUrl = require(`../assets/images/sketch/${ImageName}.png`);
+  const [curSketch, setCurSketch] = useState(
+    drawings[Math.floor(Math.random() * drawings.length)],
+  );
+
   useEffect(() => {
-    getSketchApi()
-      .then(response => {
-        if (response.error) {
-          console.log('error', response.error);
-          // showToast(response.error);
-          return;
-        }
-        const {data} = response;
-        setSketch(data);
-        console.log(data);
-        const newUrl = '.' + data.name;
-        setImage(newUrl);
-        console.log(newUrl);
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        // setLoading(false);
-      });
+    // getSketchApi()
+    //   .then(response => {
+    //     if (response.error) {
+    //       console.log('error', response.error);
+    //       // showToast(response.error);
+    //       return;
+    //     }
+    //     const {data} = response;
+    //     setSketch(data);
+    //     // console.log(data);
+    //     const newUrl = data.name;
+    //     setImage(newUrl);
+    //     console.log(newUrl);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   })
+    //   .finally(() => {
+    //     // setLoading(false);
+    //   });
     // handlePlay();
   }, []);
   function renderQuiz() {
@@ -71,10 +122,11 @@ const Quiz = ({navigation}) => {
               </Text>
             </View>
             <View style={styles.firstCard}>
-              {imageUrl ? (
+              {curSketch ? (
                 <Image
                   style={{height: '100%', width: '100%'}}
-                  source={`${images + '.' + imageUrl}`}></Image>
+                  source={curSketch.image}
+                  resizeMode="contain"></Image>
               ) : null}
               <Modal
                 animationType="slide"
@@ -155,7 +207,7 @@ const Quiz = ({navigation}) => {
                   style={styles.buttonStyle}
                   activeOpacity={0.5}
                   onPress={() =>
-                    navigation.navigate('DrawingUpload', {sketch})
+                    navigation.navigate('DrawingUpload', {curSketch})
                   }>
                   <Text style={styles.buttonTextStyle}>Continue</Text>
                 </TouchableOpacity>

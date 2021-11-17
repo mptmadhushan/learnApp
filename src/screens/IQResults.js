@@ -68,10 +68,8 @@ const QuizResults = ({navigation, route}) => {
                     <TouchableOpacity
                       style={styles.buttonStyle}
                       activeOpacity={0.5}
-                      onPress={() => navigation.navigate('Quiz')}>
-                      <Text style={styles.buttonTextStyle}>
-                        Memory Recalling Quiz
-                      </Text>
+                      onPress={() => navigation.navigate('English')}>
+                      <Text style={styles.buttonTextStyle}>English Quiz</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.buttonStyle2}

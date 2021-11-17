@@ -15,16 +15,16 @@ import {
 import useSound from 'react-native-use-sound';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 import {getQuizAPI} from '../api/getQuizAPI';
-import {getFirstQ} from '../api/getFirstQ';
+import {getFirstQEnglish} from '../api/getFirstQEnglish';
 import {getNextQ} from '../api/getNextQ';
-import {getResultAPI} from '../api/getResultAPI';
+import {getResultAPIEnglish} from '../api/getResultAPIEnglish';
 import Loader from '../components/Loader';
-import {storeIqMarks} from '../shared/asyncStorage';
+import {storeEnglishMarks} from '../shared/asyncStorage';
 
 const Iq = ({navigation}) => {
   useEffect(() => {
     setLoading(true);
-    getFirstQ()
+    getFirstQEnglish()
       .then(response => {
         if (response.error) {
           console.log('error', response.error);
@@ -71,7 +71,7 @@ const Iq = ({navigation}) => {
     console.log(theArray.length);
     if (theArray.length === 10) {
       console.log('arr length', theArray);
-      getResultAPI(theArray)
+      getResultAPIEnglish(theArray)
         .then(response => {
           if (response.error) {
             console.log('error', response.error);
@@ -80,10 +80,10 @@ const Iq = ({navigation}) => {
           }
           const resData = response.data;
           console.log('res', resData);
-          storeIqMarks(resData).then(result =>
+          storeEnglishMarks(resData).then(result =>
             console.log('Remove me if not needed Iq', result),
           );
-          navigation.navigate('IQResults', {resData});
+          navigation.navigate('EnglishResults', {resData});
         })
         .catch(error => {
           console.log('error', error);

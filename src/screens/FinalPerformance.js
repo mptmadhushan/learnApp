@@ -65,13 +65,13 @@ const LeaderBoard = ({navigation}) => {
                 <View>
                   <Text style={styles.title2}>Previous Score</Text>
                   <Text style={styles.title5}>
-                    IQ {resp.previous_quiz_scores.toFixed(2)}
+                    IQ :{resp.previous_quiz_scores.toFixed(2)}
                   </Text>
                   <Text style={styles.title5}>
-                    Speech {resp.previous_speaking_score}
+                    Speech :{resp.previous_speaking_score}
                   </Text>
                   <Text style={styles.title5}>
-                    Drawing {resp.previous_drawing_score}
+                    Drawing :{resp.previous_drawing_score}
                   </Text>
                 </View>
               ) : null}
@@ -91,13 +91,13 @@ const LeaderBoard = ({navigation}) => {
                   <Text style={styles.title2}>Current Score</Text>
                   {/* <Text style={styles.title4}>Skillful</Text> */}
                   <Text style={styles.title5}>
-                    IQ {resp.new_quiz_scores.toFixed(2)}
+                    IQ :{resp.new_quiz_scores.toFixed(2)}
                   </Text>
                   <Text style={styles.title5}>
-                    Speech {resp.new_speaking_score}
+                    Speech :{resp.new_speaking_score}
                   </Text>
                   <Text style={styles.title5}>
-                    Drawing {resp.new_drawing_score}
+                    Drawing :{resp.new_drawing_score}
                   </Text>
                 </View>
               ) : null}
@@ -166,8 +166,8 @@ const LeaderBoard = ({navigation}) => {
             <TouchableOpacity
               style={styles.buttonStyle2}
               activeOpacity={0.5}
-              onPress={() => navigation.navigate('Final')}>
-              <Text style={styles.buttonTextStyle}>Next</Text>
+              onPress={() => navigation.navigate('FinalPrediction')}>
+              <Text style={styles.buttonTextStyle}>Prediction</Text>
             </TouchableOpacity>
           </View>
           {/* </ImageBackground> */}

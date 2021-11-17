@@ -24,11 +24,12 @@ import DrawingResults from './src/screens/DrawingResults';
 import ObjectD from './src/screens/ObjectD';
 import IQ from './src/screens/IQ';
 import IQResults from './src/screens/IQResults';
+import English from './src/screens/English';
+import EnglishResults from './src/screens/EnglishResults';
 import SpeechResult from './src/screens/SpeechResult';
 import Final from './src/screens/Final';
-import QuizNew from './src/screens/Quiz/Quiz';
-import QuizIndex from './src/screens/Quiz/QuizIndex';
 import FinalPerformance from './src/screens/FinalPerformance';
+import FinalPrediction from './src/screens/FinalPrediction';
 
 const App = () => {
   return (
@@ -38,11 +39,12 @@ const App = () => {
           screenOptions={{headerShown: false}}
           initialRouteName={'OnBoard'}>
           <Stack.Screen name="Home2" component={Tabs} />
-          <Stack.Screen name="QuizNew" component={QuizNew} />
-          <Stack.Screen name="QuizIndex" component={QuizIndex} />
           <Stack.Screen name="SpeechResult" component={SpeechResult} />
           <Stack.Screen name="FinalPerformance" component={FinalPerformance} />
+          <Stack.Screen name="FinalPrediction" component={FinalPrediction} />
           <Stack.Screen name="Final" component={Final} />
+          <Stack.Screen name="English" component={English} />
+          <Stack.Screen name="EnglishResults" component={EnglishResults} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="OnBoard" component={OnBoard} />
           <Stack.Screen name="OnBoard2" component={OnBoard2} />

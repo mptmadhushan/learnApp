@@ -26,9 +26,9 @@ const QuizResults = ({navigation, route}) => {
             source={require('../assets/CONGRATS.png')}>
             <View style={styles.containerNew}>
               <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('OnBoard');
-                }}
+                // onPress={() => {
+                //   navigation.navigate('OnBoard');
+                // }}
                 style={styles.container2}>
                 <View style={styles.firstCard}>
                   <Image

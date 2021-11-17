@@ -23,11 +23,7 @@ const ObjectD = ({navigation}) => {
           style={{flex: 1}}
           source={require('../assets/images/ge.jpg')}>
           <View style={styles.containerNew}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('OnBoard');
-              }}
-              style={styles.container2}>
+            <TouchableOpacity style={styles.container2}>
               <View style={styles.firstCard}>
                 <Image
                   style={{height: '100%', width: '50%'}}

@@ -13,12 +13,14 @@ import {
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import {sketchApi} from '../api/sketchApi';
+import Loader from '../components/Loader';
+import * as ImagePicker from 'react-native-image-picker';
 
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 
 const DrawingUpload = ({navigation, route}) => {
-  const {sketch} = route.params;
-
+  const {curSketch} = route.params;
+  const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(true);
   let camera;
   const takePicture = async () => {
@@ -29,8 +31,60 @@ const DrawingUpload = ({navigation, route}) => {
       uploadSketch(data.uri);
     }
   };
+  const launchImageLibrary = () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.launchImageLibrary(options, response => {
+      console.log('Response = ', response.assets[0].uri);
+      setLoading(true);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        let formData = new FormData();
+        formData.append('image', {
+          uri: response.assets[0].uri,
+          type: 'image/jpeg',
+          name: 'sketch.jpg',
+        });
+        formData.append('sketch_id', curSketch.id);
+        console.log(formData);
+        sketchApi(formData)
+          .then(response => {
+            if (response.error) {
+              console.log('error', response.error);
+              // showToast(response.error);
+              return;
+            }
+
+            const resData = response.data;
+            console.log('res', resData);
+            navigation.navigate('DrawingResults', {resData});
+            setLoading(false);
+          })
+          .catch(error => {
+            console.log('error', error);
+
+            // showToast(error.response.data.message);
+          })
+          .finally(() => {
+            // setLoading(false);
+          });
+      }
+    });
+  };
   const uploadSketch = async fileUrl => {
-    console.log('upload', sketch);
+    setLoading(true);
+
+    console.log('upload', curSketch);
     console.log('🧑‍🚀🧑‍🚀', fileUrl);
     let formData = new FormData();
     formData.append('image', {
@@ -38,7 +92,7 @@ const DrawingUpload = ({navigation, route}) => {
       type: 'image/jpeg',
       name: 'sketch.jpg',
     });
-    formData.append('sketch_id', 1);
+    formData.append('sketch_id', curSketch.id);
     console.log(formData);
 
     sketchApi(formData)
@@ -52,6 +106,7 @@ const DrawingUpload = ({navigation, route}) => {
         const resData = response.data;
         console.log('res', resData);
         navigation.navigate('DrawingResults', {resData});
+        setLoading(false);
       })
       .catch(error => {
         console.log('error', error);
@@ -68,6 +123,8 @@ const DrawingUpload = ({navigation, route}) => {
         <ImageBackground
           style={styles.containerNew}
           source={require('../assets/drawingUp.jpg')}>
+          <Loader loading={loading} />
+
           <View style={styles.containerNew}>
             <View
               style={{
@@ -143,6 +200,13 @@ const DrawingUpload = ({navigation, route}) => {
                 onPress={() => takePicture()}>
                 {/* onPress={() => navigation.navigate('DrawingResults')}> */}
                 <Text style={styles.buttonTextStyle}>Capture</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.buttonStyle2}
+                activeOpacity={0.5}
+                onPress={() => launchImageLibrary()}>
+                {/* onPress={() => navigation.navigate('DrawingResults')}> */}
+                <Text style={styles.buttonTextStyle}>Upload</Text>
               </TouchableOpacity>
             </View>
           </View>

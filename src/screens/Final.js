@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -12,20 +12,57 @@ import {
 } from 'react-native';
 // import {Avatar} from 'react-native-elements';
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {getFinalResultAPI} from '../api/getFinalResultAPI';
 
 const LeaderBoard = ({navigation}) => {
-  const users = [
-    {
-      name: 'Average',
-      rating: '999+',
-      avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
-    },
-    {
-      name: 'Medium',
-      rating: '949+',
-      avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
-    },
-  ];
+  const [resp, setResp] = useState();
+  const [marks, setMarks] = useState();
+  const [grade, setGrade] = useState();
+
+  useEffect(() => {
+    getFinalResultAPI()
+      .then(response => {
+        if (response.error) {
+          console.log('error', response.error);
+          // showToast(response.error);
+          return;
+        }
+        const {data} = response;
+        console.log(data);
+        setResp(data);
+        const a = data.new_drawing_score;
+        const b = data.new_speaking_score;
+        const c = data.new_quiz_scores;
+
+        const total = a + b + c;
+
+        const total2 = (total / 3) * 100;
+
+        console.log(total);
+        console.log('------');
+        console.log(total2);
+        setMarks(total2);
+        if (total2 > 40) {
+          setGrade('C');
+        }
+        if (total2 > 60) {
+          setGrade('B');
+        }
+        if (total2 > 80) {
+          setGrade('A');
+        }
+        if (total2 > 90) {
+          setGrade('A+');
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+    // handlePlay();
+  }, []);
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
@@ -40,8 +77,10 @@ const LeaderBoard = ({navigation}) => {
             </View>
 
             <Text style={styles.title2}>YOU HAVE SUCCESSFULLY COMPLETED!</Text>
-            <Text style={styles.title4}>SCORE: 1231</Text>
-            <Text style={styles.title4}>Rating: A+</Text>
+            {marks ? (
+              <Text style={styles.title4}>SCORE: {marks.toFixed(2)}</Text>
+            ) : null}
+            {grade ? <Text style={styles.title4}>Rating: {grade}</Text> : null}
             <Text style={styles.title3}>
               Veniam aliquip irure culpa aute aliqua nostrud magna velit id
               veniam fugiat. Do voluptate tempor dolor adipisicing et ex eiusmod
