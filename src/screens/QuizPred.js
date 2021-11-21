@@ -4,22 +4,26 @@ import {
   SafeAreaView,
   View,
   Text,
+  Modal,
   StyleSheet,
   TouchableOpacity,
-  Image,
-  Modal,
-  FlatList,
   ImageBackground,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
-// import {CheckBox} from 'react-native-elements';
-// import {Avatar} from 'react-native-elements';
-import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {SIZES, COLORS} from '../constants';
 import {getOverallResultAPI} from '../api/getOverallResultAPI';
+import {getIq, getMath, getEnglish} from '../shared/asyncStorage';
+import {WebView} from 'react-native-webview';
+import Refs from '../screens/Refs';
+import BeautyWebView from 'react-native-beauty-webview';
 
-const LeaderBoard = ({navigation}) => {
+const QuizPred = ({navigation}) => {
   const [resp, setResp] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [maths, setMaths] = useState();
+  const [english, setEnglish] = useState();
+  const [iq, setIq] = useState();
+  const [ref, setRef] = useState();
+  const [refUrl, setRefUrl] = useState();
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     getOverallResultAPI()
@@ -30,7 +34,7 @@ const LeaderBoard = ({navigation}) => {
           return;
         }
         const {data} = response;
-        console.log(data);
+        setRef(data.refer);
         setResp(data);
       })
       .catch(error => {
@@ -39,74 +43,54 @@ const LeaderBoard = ({navigation}) => {
       .finally(() => {
         // setLoading(false);
       });
-    // handlePlay();
+
+    getIq().then(data => {
+      const marks = JSON.parse(data);
+      console.log('iq res 🍫', marks.marks);
+      setIq(marks);
+    });
+
+    getMath().then(data => {
+      const marks = JSON.parse(data);
+      setMaths(marks);
+    });
+
+    getEnglish().then(data => {
+      const marks = JSON.parse(data);
+      setEnglish(marks);
+    });
   }, []);
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const refsWebView = item => {
+    // setModalVisible(true);
+    setVisible(true);
+    setRefUrl(item);
+    // navigation.navigate('Refs', {item});
+  };
   function renderQuiz() {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={{flex: 1}}
           source={require('../assets/CONGRATS.png')}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <View>
-                  <Text style={styles.title22}>Prediction</Text>
-                </View>
-                {resp ? <Text style={styles.title3}>{resp.pred}</Text> : null}
-                <TouchableOpacity
-                  // disabled={!toggleCheckBox}
-                  style={styles.buttonStyle3}
-                  activeOpacity={0.5}
-                  onPress={() => setModalVisible(!modalVisible)}>
-                  <Text style={styles.buttonTextStyle}>Close</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
           <ImageBackground
             style={{flex: 1}}
             source={require('../assets/6ob.gif')}>
-            <View>
-              <Text style={styles.title}>Leaderboard</Text>
-            </View>
-            <View style={{alignItems: 'center', marginTop: 40}}>
-              {/* {users.map((u, i) => {
-                return ( */}
-              {resp ? (
-                <View style={styles.leaderBack}>
-                  <View style={styles.number}>
-                    <Text
-                      style={{
-                        color: COLORS.white,
-                        fontFamily: 'Oh Whale - TTF',
-                      }}>
-                      i
-                    </Text>
-                  </View>
-                  <Text>{resp.grade}</Text>
-                  <Text>Score : {resp.score.toFixed(2)}+</Text>
-                </View>
-              ) : null}
-              {/* );
-              })} */}
-            </View>
-            {resp ? (
-              <View>
-                <Text style={styles.title2}>Overall Performance</Text>
-                <Text style={styles.title4}>
-                  SCORE: {resp.score.toFixed(2)}
-                </Text>
-                <Text style={styles.title4}>Progress: {resp.progress}</Text>
-                <Text style={styles.title3}>
-                  {resp.grade} : {resp.detail}
-                </Text>
-              </View>
+            {refUrl ? (
+              <BeautyWebView
+                visible={visible} // Reguired for open and close
+                onPressClose={() => setVisible(false)} // Reguired for closing the modal
+                url={refUrl}
+                extraMenuItems={[
+                  {
+                    title: 'LeaderBoard',
+                    onPress: () => navigation.navigate('LeaderBoard'),
+                  },
+                ]}
+              />
             ) : null}
+            <View>
+              <Text style={styles.title}>Prediction</Text>
+            </View>
             <View
               style={{
                 display: 'flex',
@@ -115,22 +99,86 @@ const LeaderBoard = ({navigation}) => {
                 justifyContent: 'center',
                 marginTop: 40,
               }}>
-              <CheckBox
-                disabled={false}
-                value={toggleCheckBox}
-                onValueChange={newValue => setToggleCheckBox(newValue)}
-              />
-              <Text style={styles.title6}>
-                Parent should mark this to continue
-              </Text>
+              {resp ? <Text style={styles.title61}>{resp.pred}</Text> : null}
+            </View>
+            <View style={{alignItems: 'center', marginTop: 10}}>
+              <View style={styles.leaderBack}>
+                <View style={styles.number}>
+                  <Text
+                    style={{
+                      color: COLORS.white,
+                      fontFamily: 'Oh Whale - TTF',
+                    }}>
+                    1
+                  </Text>
+                </View>
+                <Text>IQ </Text>
+                {iq ? <Text>Score :{iq.marks.marks}</Text> : null}
+              </View>
+            </View>
+            <View style={{alignItems: 'center', marginTop: 10}}>
+              <View style={styles.leaderBack}>
+                <View style={styles.number}>
+                  <Text
+                    style={{
+                      color: COLORS.white,
+                      fontFamily: 'Oh Whale - TTF',
+                    }}>
+                    2
+                  </Text>
+                </View>
+                <Text>English</Text>
+                {english ? <Text>Score :{english.marks.marks}</Text> : null}
+              </View>
+            </View>
+            <View style={{alignItems: 'center', marginTop: 10}}>
+              <View style={styles.leaderBack}>
+                <View style={styles.number}>
+                  <Text
+                    style={{
+                      color: COLORS.white,
+                      fontFamily: 'Oh Whale - TTF',
+                    }}>
+                    3
+                  </Text>
+                </View>
+                <Text>Math</Text>
+
+                {maths ? <Text>Score :{maths.marks.marks}</Text> : null}
+              </View>
+            </View>
+
+            <View style={{alignItems: 'center', marginTop: 10}}>
+              {english ? (
+                <Text style={styles.titleRef}>Improve Knowledge</Text>
+              ) : null}
+              {ref ? ( //if refs array is not empty
+                <View style={styles.refs}>
+                  {ref.map((item, index) => {
+                    return (
+                      <View key={index} style={styles.ref}>
+                        <TouchableOpacity
+                          style={styles.buttonStyleRef}
+                          activeOpacity={0.5}
+                          onPress={() => refsWebView(item)}>
+                          <Text
+                            numberOfLines={1}
+                            style={styles.buttonTextStyleRef}>
+                            {item}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+                </View>
+              ) : null}
             </View>
             <View style={{display: 'flex', alignItems: 'center'}}>
               <TouchableOpacity
-                disabled={!toggleCheckBox}
                 style={styles.buttonStyle2}
                 activeOpacity={0.5}
-                onPress={() => navigation.navigate('Speech')}>
-                <Text style={styles.buttonTextStyle}>Speech Training</Text>
+                onPress={() => navigation.navigate('LeaderBoard')}>
+                <Text style={styles.buttonTextStyle}>LeaderBoard</Text>
               </TouchableOpacity>
             </View>
           </ImageBackground>
@@ -156,6 +204,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Oh Whale - TTF',
   },
+  buttonTextStyleRef: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontFamily: 'Oh Whale - TTF',
+    width: '60%',
+  },
   buttonStyle: {
     backgroundColor: COLORS.fourth,
     borderWidth: 0,
@@ -173,14 +227,28 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     color: COLORS.third,
     borderColor: '#ff6150',
-    height: 40,
+    height: 30,
     width: SIZES.width / 1.5,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
     marginLeft: 35,
     marginRight: 35,
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  buttonStyleRef: {
+    backgroundColor: COLORS.fourth,
+    borderWidth: 0,
+    color: COLORS.third,
+    borderColor: '#ff6150',
+    height: 20,
+    width: SIZES.width / 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginLeft: 35,
+    marginRight: 35,
     marginBottom: 5,
   },
   buttonStyle3: {
@@ -188,7 +256,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     color: COLORS.third,
     borderColor: '#ff6150',
-    height: 40,
+    height: 20,
     width: 150,
     alignItems: 'center',
     justifyContent: 'center',
@@ -201,7 +269,7 @@ const styles = StyleSheet.create({
   leaderBack: {
     marginTop: 8,
     display: 'flex',
-    height: SIZES.height / 10,
+    height: SIZES.height / 15,
     width: '90%',
     backgroundColor: COLORS.fourth,
     flexDirection: 'row',
@@ -216,6 +284,7 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
+    width: SIZES.width * 0.8,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
@@ -287,7 +356,14 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: SIZES.height / 6.5,
-    fontSize: 25,
+    fontSize: 35,
+    padding: 15,
+    color: COLORS.third,
+    textAlign: 'center',
+    fontFamily: 'LuckiestGuy-Regular',
+  },
+  titleRef: {
+    fontSize: 35,
     padding: 15,
     color: COLORS.third,
     textAlign: 'center',
@@ -312,6 +388,13 @@ const styles = StyleSheet.create({
   title6: {
     fontFamily: 'Oh Whale - TTF',
     fontSize: 14,
+    padding: 5,
+    color: COLORS.white,
+    textAlign: 'center',
+  },
+  title61: {
+    fontFamily: 'Oh Whale - TTF',
+    fontSize: 24,
     padding: 5,
     color: COLORS.white,
     textAlign: 'center',
@@ -343,4 +426,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LeaderBoard;
+export default QuizPred;

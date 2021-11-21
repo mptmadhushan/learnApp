@@ -17,7 +17,7 @@ import QuizResults from './src/screens/QuizResults';
 import Speech from './src/screens/Speech';
 import Drawing from './src/screens/Drawing';
 import LeaderBoard from './src/screens/LeaderBoard';
-import SpeechResults from './src/screens/SpeechResults';
+import SpeechResults from './src/screens/SpeechResult';
 import DrawingTest from './src/screens/DrawingTest';
 import DrawingUpload from './src/screens/DrawingUpload';
 import DrawingResults from './src/screens/DrawingResults';
@@ -26,10 +26,11 @@ import IQ from './src/screens/IQ';
 import IQResults from './src/screens/IQResults';
 import English from './src/screens/English';
 import EnglishResults from './src/screens/EnglishResults';
-import SpeechResult from './src/screens/SpeechResult';
 import Final from './src/screens/Final';
+import QuizPred from './src/screens/QuizPred';
 import FinalPerformance from './src/screens/FinalPerformance';
 import FinalPrediction from './src/screens/FinalPrediction';
+import Refs from './src/screens/Refs';
 
 const App = () => {
   return (
@@ -39,7 +40,6 @@ const App = () => {
           screenOptions={{headerShown: false}}
           initialRouteName={'OnBoard'}>
           <Stack.Screen name="Home2" component={Tabs} />
-          <Stack.Screen name="SpeechResult" component={SpeechResult} />
           <Stack.Screen name="FinalPerformance" component={FinalPerformance} />
           <Stack.Screen name="FinalPrediction" component={FinalPrediction} />
           <Stack.Screen name="Final" component={Final} />
@@ -50,6 +50,7 @@ const App = () => {
           <Stack.Screen name="OnBoard2" component={OnBoard2} />
           <Stack.Screen name="Login" component={LogIn} />
           <Stack.Screen name="RegisterScreen" component={Register} />
+          <Stack.Screen name="QuizPred" component={QuizPred} />
           <Stack.Screen name="Quiz" component={Quiz} />
           <Stack.Screen name="QuizResults" component={QuizResults} />
           <Stack.Screen name="LeaderBoard" component={LeaderBoard} />
@@ -60,6 +61,7 @@ const App = () => {
           <Stack.Screen name="DrawingUpload" component={DrawingUpload} />
           <Stack.Screen name="Drawing" component={Drawing} />
           <Stack.Screen name="IQ" component={IQ} />
+          <Stack.Screen name="Refs" component={Refs} />
           <Stack.Screen name="DrawingResults" component={DrawingResults} />
           <Stack.Screen name="IQResults" component={IQResults} />
         </Stack.Navigator>

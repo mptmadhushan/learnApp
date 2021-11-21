@@ -51,10 +51,8 @@ const QuizResults = ({navigation, route}) => {
                     <TouchableOpacity
                       style={styles.buttonStyle}
                       activeOpacity={0.5}
-                      onPress={() => navigation.navigate('LeaderBoard')}>
-                      <Text style={styles.buttonTextStyle}>
-                        Overall performance
-                      </Text>
+                      onPress={() => navigation.navigate('QuizPred')}>
+                      <Text style={styles.buttonTextStyle}>Quiz Score</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.buttonStyle2}

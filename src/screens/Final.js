@@ -81,14 +81,14 @@ const LeaderBoard = ({navigation}) => {
               <Text style={styles.title4}>SCORE: {marks.toFixed(2)}</Text>
             ) : null}
             {grade ? <Text style={styles.title4}>Rating: {grade}</Text> : null}
-            <Text style={styles.title3}>
+            {/* <Text style={styles.title3}>
               Veniam aliquip irure culpa aute aliqua nostrud magna velit id
               veniam fugiat. Do voluptate tempor dolor adipisicing et ex eiusmod
               ea aliquip. Proident sint qui laborum dolor Lorem ullamco sint ad
               incididunt aliquip aute irure ut deserunt. Quis velit dolore
               adipisicing ullamco dolore sit labore duis adipisicing aute
               cupidatat adipisicing. Des
-            </Text>
+            </Text> */}
             <View style={{display: 'flex', alignItems: 'center'}}>
               <TouchableOpacity
                 style={styles.buttonStyle2}

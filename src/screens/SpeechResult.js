@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     // marginTop: -21,
     fontSize: 25,
     paddingTop: 15,
-    color: COLORS.third,
+    color: COLORS.white,
     // fontWeight: 'bold',
     fontFamily: 'Oh Whale - TTF',
     textAlign: 'center',

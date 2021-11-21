@@ -40,7 +40,7 @@ export const getUserToken = async () => {
     console.log('Error!!!!! (Handle me properly) -> ', e);
   }
 };
-export const geIq = async () => {
+export const getIq = async () => {
   try {
     const value = await AsyncStorage.getItem('@iq_marks');
     if (value !== null) {
@@ -51,7 +51,7 @@ export const geIq = async () => {
     console.log('Error!!!!! (Handle me properly) -> ', e);
   }
 };
-export const geMath = async () => {
+export const getMath = async () => {
   try {
     const value = await AsyncStorage.getItem('@math_marks');
     if (value !== null) {
@@ -62,7 +62,7 @@ export const geMath = async () => {
     console.log('Error!!!!! (Handle me properly) -> ', e);
   }
 };
-export const geEnglish = async () => {
+export const getEnglish = async () => {
   try {
     const value = await AsyncStorage.getItem('@english_marks');
     if (value !== null) {

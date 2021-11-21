@@ -121,7 +121,7 @@ const Iq = ({navigation}) => {
     console.log('🧑‍🚀🧑‍🚀', fileUrl);
     let formData = new FormData();
     formData.append('audio', {
-      uri: 'file:///data/user/0/com.welipilla/files/test.wav',
+      uri: 'file:///data/user/0/com.learnapp/files/test.wav',
       type: 'audio/wav',
       name: 'test.wav',
     });
@@ -283,7 +283,7 @@ const Iq = ({navigation}) => {
                 <TouchableOpacity
                   style={styles.buttonStyle}
                   activeOpacity={0.5}
-                  onPress={() => navigation.navigate('SpeechResult', {score})}>
+                  onPress={() => navigation.navigate('SpeechResults', {score})}>
                   <Text style={styles.buttonTextStyle}>Continue</Text>
                 </TouchableOpacity>
               </View>

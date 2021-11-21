@@ -6,13 +6,10 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
-  FlatList,
   ImageBackground,
 } from 'react-native';
 
-import {icons, images, SIZES, COLORS, FONTS} from '../constants';
-import {login} from '../api/authAPI';
+import {SIZES, COLORS} from '../constants';
 import {useDispatch} from 'react-redux';
 import {authLogout} from '../redux/authSlice';
 import {clearUserToken} from '../shared/asyncStorage';
@@ -102,7 +99,6 @@ const styles = StyleSheet.create({
     fontSize: 35,
     marginRight: SIZES.width / 2.7,
     color: COLORS.white,
-    // fontWeight: 'bold',
     textAlign: 'center',
   },
   title2: {
