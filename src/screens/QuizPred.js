@@ -5,6 +5,7 @@ import {
   View,
   Text,
   Modal,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
@@ -68,7 +69,7 @@ const QuizPred = ({navigation}) => {
   };
   function renderQuiz() {
     return (
-      <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.container}>
         <ImageBackground
           style={{flex: 1}}
           source={require('../assets/CONGRATS.png')}>
@@ -89,7 +90,7 @@ const QuizPred = ({navigation}) => {
               />
             ) : null}
             <View>
-              <Text style={styles.title}>Prediction</Text>
+              <Text style={styles.title}>Current Scores</Text>
             </View>
             <View
               style={{
@@ -183,7 +184,7 @@ const QuizPred = ({navigation}) => {
             </View>
           </ImageBackground>
         </ImageBackground>
-      </SafeAreaView>
+      </ScrollView>
     );
   }
 

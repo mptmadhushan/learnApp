@@ -17,7 +17,16 @@ import {getFinalResultAPI} from '../api/getFinalResultAPI';
 
 const LeaderBoard = ({navigation}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-
+  const userResults = {
+    iq_marks: 5,
+    iq_time_taken: 5,
+    math_marks: 5,
+    math_time_taken: 5,
+    english_marks: 5,
+    english_time_taken: 5,
+    drawing_marks: 5,
+    speaking_marks: 5,
+  };
   const users = [
     {
       new_drawing_score: 0.2,
@@ -166,7 +175,9 @@ const LeaderBoard = ({navigation}) => {
             <TouchableOpacity
               style={styles.buttonStyle2}
               activeOpacity={0.5}
-              onPress={() => navigation.navigate('FinalPrediction')}>
+              onPress={() =>
+                navigation.navigate('FinalPrediction', {userResults})
+              }>
               <Text style={styles.buttonTextStyle}>Prediction</Text>
             </TouchableOpacity>
           </View>

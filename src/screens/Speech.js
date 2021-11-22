@@ -141,7 +141,6 @@ const Iq = ({navigation}) => {
         console.log('res', data);
         setScore(data);
         setLoading(false);
-
         showToast('Press Continue');
       })
       .catch(error => {

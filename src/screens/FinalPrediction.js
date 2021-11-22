@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
@@ -14,19 +15,12 @@ import {
 import {icons, images, SIZES, COLORS, FONTS} from '../constants';
 import {getFinalPredictApi} from '../api/getFinaPredictionAPI';
 
-const FinalPrediction = ({navigation}) => {
-  const [res, setRes] = useState(0);
-  const userResults = {
-    iq_marks: 5,
-    iq_time_taken: 5,
-    'math_marks ': 5,
-    math_time_taken: 5,
-    english_marks: 5,
-    english_time_taken: 5,
-    drawing_marks: 5,
-    speaking_marks: 5,
-  };
+const FinalPrediction = ({navigation, route}) => {
+  const {userResults} = route.params;
+  const [res, setRes] = useState();
+
   useEffect(() => {
+    console.log('tag', userResults);
     console.log('tag', userResults);
     getFinalPredictApi(userResults)
       .then(response => {
@@ -36,6 +30,7 @@ const FinalPrediction = ({navigation}) => {
           return;
         }
         const {data} = response;
+        console.log('tag', data);
         setRes(data);
         // setLoading(false);
       })
@@ -60,12 +55,35 @@ const FinalPrediction = ({navigation}) => {
             <View>
               <Text style={styles.title}>predict performance</Text>
             </View>
-            <View>
-              <Text style={styles.title2}>Skillfull..!</Text>
-            </View>
-            <Text style={styles.title2}>
-              Student most probably gain grade Skillfull end of the year.
-            </Text>
+            {res ? (
+              <View>
+                {res.predicted_grade === 'Skillful' ? (
+                  <Text style={styles.title2}>
+                    {res.predicted_grade}- Your child's performance is very
+                    good. You're very lucky to have such a child
+                  </Text>
+                ) : null}
+                {res.predicted_grade === 'Developing' ? (
+                  <Text style={styles.title2}>
+                    {res.predicted_grade}- Your child have average performance
+                    parents can encourage to child for performance even better
+                  </Text>
+                ) : null}
+                {res.predicted_grade === 'Minimally Effective' ? (
+                  <Text style={styles.title2}>
+                    {res.predicted_grade}- Better than ineffective but parents
+                    still need to focus on child's education
+                  </Text>
+                ) : null}
+                {res.predicted_grade === 'Ineffective' ? (
+                  <Text style={styles.title2}>
+                    {res.predicted_grade}- Parent should pay serious attention
+                    to their child!
+                  </Text>
+                ) : null}
+              </View>
+            ) : null}
+            {res ? <Text style={styles.title2}>{res.detail}</Text> : null}
 
             <View style={{display: 'flex', alignItems: 'center'}}>
               <TouchableOpacity

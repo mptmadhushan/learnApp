@@ -87,11 +87,13 @@ const DrawingUpload = ({navigation, route}) => {
     console.log('upload', curSketch);
     console.log('🧑‍🚀🧑‍🚀', fileUrl);
     let formData = new FormData();
+
     formData.append('image', {
       uri: fileUrl,
       type: 'image/jpeg',
       name: 'sketch.jpg',
     });
+
     formData.append('sketch_id', curSketch.id);
     console.log(formData);
 

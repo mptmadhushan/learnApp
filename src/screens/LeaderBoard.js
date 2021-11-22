@@ -9,6 +9,7 @@ import {
   Image,
   Modal,
   FlatList,
+  ScrollView,
   ImageBackground,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
@@ -44,7 +45,7 @@ const LeaderBoard = ({navigation}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   function renderQuiz() {
     return (
-      <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.container}>
         <ImageBackground
           style={{flex: 1}}
           source={require('../assets/CONGRATS.png')}>
@@ -135,7 +136,7 @@ const LeaderBoard = ({navigation}) => {
             </View>
           </ImageBackground>
         </ImageBackground>
-      </SafeAreaView>
+      </ScrollView>
     );
   }
 
